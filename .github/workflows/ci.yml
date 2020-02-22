@@ -21,7 +21,7 @@ jobs:
             npm install
         - name: Build Android Release
           run: |
-            cd android && ./gradlew assembleRelease -Pmybetweentime_UPLOAD_STORE_PASSWORD='${{ secrets.KEYSTORE_PASSWORD }}' -Pmybetweentime_UPLOAD_KEY_PASSWORD='${{ secrets.KEYSTORE_PASSWORD }}'
+            cd android && ./gradlew assembleRelease -PMYAPP_UPLOAD_STORE_PASSWORD='${{ secrets.KEYSTORE_PASSWORD }}' -PMYAPP_UPLOAD_KEY_PASSWORD='${{ secrets.KEYSTORE_PASSWORD }}'
         - name: Upload Artifact
           uses: actions/upload-artifact@v1
           with:
@@ -41,7 +41,7 @@ jobs:
         - name: Build app
           run: |
             xcodebuild -workspace mybetweentime.xcworkspace -scheme mybetweentime archive -archivePath mybetweentime.xcarchive -allowProvisioningUpdates
-            xcodebuild -exportArchive -archivePath ./mybetweentime.xcarchive -exportPath . -exportOptionsPlist mybetweentime/Info.plist
+            xcodebuild -exportArchive -archivePath ./ios/mybetweentime.xcarchive -exportPath . -exportOptionsPlist mybetweentime/Info.plist
             mv mybetweentime.ipa ../mybetweentime.ipa
         - name: Upload Artifact
           uses: actions/upload-artifact@v1
