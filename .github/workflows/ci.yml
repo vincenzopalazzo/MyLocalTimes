@@ -11,9 +11,6 @@ jobs:
       - name: Install npm dependencies
         run: |
           npm install
-      - name: Run tests
-        run: |
-          npm test
   build-android:
       needs: install-and-test
       runs-on: ubuntu-latest
