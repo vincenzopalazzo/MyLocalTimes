@@ -27,24 +27,3 @@ jobs:
           with:
             name: app-release.apk
             path: android/app/build/outputs/apk/release/
-  build-ios:
-      needs: install-and-test
-      runs-on: [self-hosted, macos]
-      steps:
-        - uses: actions/checkout@v2
-        - name: Install npm dependencies
-          run: |
-            npm install
-        - name: Install pod dependencies
-          run: |
-            cd ios && pod install
-        - name: Build app
-          run: |
-            xcodebuild -workspace mybetweentime.xcworkspace -scheme mybetweentime archive -archivePath mybetweentime.xcarchive -allowProvisioningUpdates
-            xcodebuild -exportArchive -archivePath ./ios/mybetweentime.xcarchive -exportPath . -exportOptionsPlist mybetweentime/Info.plist
-            mv mybetweentime.ipa ../mybetweentime.ipa
-        - name: Upload Artifact
-          uses: actions/upload-artifact@v1
-          with:
-            name: mybetweentime.ipa
-            path: ios/build/
