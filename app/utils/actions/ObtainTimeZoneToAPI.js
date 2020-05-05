@@ -15,53 +15,74 @@
  */
 'use strict';
 
-import Util from '../Util'
+import Util from '../Util';
 
-const URL_BASE = 'https://script.google.com/macros/s/AKfycbyd5AcbAnWi2Yn0xhFRbyzS4qMq1VucMVgVvhul5XqS9HkAyJY/exec?tz=';
+const URL_BASE =
+  'https://script.google.com/macros/s/AKfycbyd5AcbAnWi2Yn0xhFRbyzS4qMq1VucMVgVvhul5XqS9HkAyJY/exec?tz=';
 
 const LOG_TAG = new Date().toISOString() + ' ' + 'ObtainTimeZoneToAPI.js';
 
 class ObtainTimeZoneToAPI {
+  constructor() {}
 
-    constructor() {}
-
-    static async createRequestByName(nameCity, nameCountry){
-        if(!nameCity || !nameCountry){
-            throw new Error('Name City or Name of County is/are null');
-        }
-        try {
-            let finalUrl = URL_BASE + Util.doChangeIntoApiName(nameCountry)
-                                + '/' + Util.doChangeIntoApiName(nameCity);
-            console.debug(LOG_TAG, 'Final url into ObtainTimeZoneToAPI: ', finalUrl);
-            return await fetch(finalUrl)
-                .then((response) => response.json())
-                .then((responseJson) => {
-                    responseJson.cityUrl = finalUrl;
-                    console.debug(LOG_TAG, 'Object json into ObtainTimeZoneToAPI: ',responseJson);
-                    return responseJson;
-                })
-                .catch((error) => {
-                    throw error;
-                });
-        }catch (exception) {
-            console.error(exception);
-            throw exception;
-        }
+  //The name city should be null for the apy, an example should be turkey
+  static async createRequestByName(nameCity, nameCountry) {
+    if (!nameCountry) {
+      throw new Error('Name City or Name of County is/are null');
     }
-
-    static async createRequestByURL(url){
-        console.debug(LOG_TAG, 'URL in method createRequestByURL: ', url);
-        return await fetch(url)
-            .then((response) => response.json())
-            .then((responseJson) => {
-                console.debug(LOG_TAG, responseJson);
-                return responseJson;
-            })
-            .catch((error) => {
-                throw error;
-            });
+    try {
+      let finalUrl;
+      if (!nameCity) {
+        finalUrl = URL_BASE + Util.doChangeIntoApiName(nameCountry);
+        console.debug(
+          LOG_TAG,
+          'Final url into ObtainTimeZoneToAPI: ',
+          finalUrl,
+        );
+      } else {
+        finalUrl =
+          URL_BASE +
+          Util.doChangeIntoApiName(nameCountry) +
+          '/' +
+          Util.doChangeIntoApiName(nameCity);
+        console.debug(
+          LOG_TAG,
+          'Final url into ObtainTimeZoneToAPI: ',
+          finalUrl,
+        );
+      }
+      return await fetch(finalUrl)
+        .then(response => response.json())
+        .then(responseJson => {
+          responseJson.cityUrl = finalUrl;
+          console.debug(
+            LOG_TAG,
+            'Object json into ObtainTimeZoneToAPI: ',
+            responseJson,
+          );
+          return responseJson;
+        })
+        .catch(error => {
+          throw error;
+        });
+    } catch (exception) {
+      console.error(exception);
+      throw exception;
     }
+  }
+
+  static async createRequestByURL(url) {
+    console.debug(LOG_TAG, 'URL in method createRequestByURL: ', url);
+    return await fetch(url)
+      .then(response => response.json())
+      .then(responseJson => {
+        console.debug(LOG_TAG, responseJson);
+        return responseJson;
+      })
+      .catch(error => {
+        throw error;
+      });
+  }
 }
 
 export default ObtainTimeZoneToAPI;
-

@@ -16,30 +16,30 @@
 'use strict';
 
 import {StyleSheet, Dimensions} from 'react-native';
-import React from "react";
+import React from 'react';
 
 export default StyleSheet.create({
-    buttonsDialog: {
-        marginTop: 25,
-        flexDirection: 'row',
-        justifyContent: 'center'
-    },
-    textFooter:{
-        alignSelf:'center',
-    },
-    textInput: {
-        marginTop: 16,
-        fontSize: 16
-    },
-    chipInfo: {
-        marginTop: 15,
-        justifyContent: 'center',
-        textAlign: 'center'
-    },
-    container: {
-        position: 'absolute',
-        bottom: 0,
-        left: 0,
-        flex: 1
-    }
+  buttonsDialog: {
+    marginTop: 25,
+    flexDirection: 'row',
+    justifyContent: 'center',
+  },
+  textFooter: {
+    alignSelf: 'center',
+  },
+  textInput: {
+    marginTop: 16,
+    fontSize: 16,
+  },
+  chipInfo: {
+    marginTop: 15,
+    justifyContent: 'center',
+    textAlign: 'center',
+  },
+  container: {
+    position: 'absolute',
+    bottom: 0,
+    left: 0,
+    flex: 1,
+  },
 });

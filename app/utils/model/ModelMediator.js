@@ -15,37 +15,36 @@
  */
 'use strict';
 
-let _SINGLETON = undefined;
+let _SINGLETON;
 //@deprecated
 class ModelMediatorSingleton {
+  constructor() {
+    this.repository = new Map([]);
+  }
 
-    constructor() {
-        this.repository = new Map([]);
+  static getInstance() {
+    if (!_SINGLETON) {
+      _SINGLETON = new ModelMediatorSingleton();
     }
+    return _SINGLETON;
+  }
 
-    static getInstance() {
-        if (!_SINGLETON) {
-            _SINGLETON = new ModelMediatorSingleton();
-        }
-        return _SINGLETON;
+  putBean(key, object) {
+    if (!key || !object) {
+      throw new Error('Object or key is/are null');
     }
+    this.repository.set(key, object);
+  }
 
-    putBean(key, object) {
-        if (!key || !object) {
-            throw new Error('Object or key is/are null');
-        }
-        this.repository.set(key, object);
+  getBean(key) {
+    if (!key) {
+      throw new Error('Key null');
     }
-
-    getBean(key) {
-        if (!key) {
-            throw new Error('Key null');
-        }
-        if (this.repository.has(key)) {
-            return this.repository.get(key);
-        }
-        throw undefined;
+    if (this.repository.has(key)) {
+      return this.repository.get(key);
     }
+    throw undefined;
+  }
 }
 
 export default ModelMediatorSingleton;

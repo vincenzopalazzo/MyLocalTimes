@@ -15,7 +15,7 @@
  */
 'use strict';
 
-import ComponentStyle from './ScollViewCardsTime.component.style'
+import ComponentStyle from './ScollViewCardsTime.component.style';
 
 import React, {Component} from 'react';
 
@@ -24,72 +24,74 @@ import {withTheme} from 'react-native-paper';
 
 import CardTime from '../CardTime/CardTime.component';
 
-import Util from "../../utils/Util";
-import DAOAndroidStorage from "../../utils/DAOAndroidStorage";
-import Constant from "../../utils/Constant";
+import Util from '../../utils/Util';
+import DAOAndroidStorage from '../../utils/DAOAndroidStorage';
+import Constant from '../../utils/Constant';
 
 class ScrollViewCardsTime extends Component {
+  constructor(props) {
+    super(props);
 
-    constructor(props) {
-        super(props);
+    this.state = {
+      refreshing: false,
+      initialized: false,
+    };
 
-        this.state = {
-            refreshing: false,
-            initialized: false,
-        };
+    this.onRefresh = this.onRefresh.bind(this);
+    this.doRemoveItem = this.doRemoveItem.bind(this);
+  }
 
-        this.onRefresh = this.onRefresh.bind(this);
-        this.doRemoveItem = this.doRemoveItem.bind(this);
+  doRemoveItem(item) {
+    if (!item) {
+      throw new Error('Item null');
     }
-
-    doRemoveItem(item){
-        if(!item){
-            throw new Error('Item null');
-        }
-        let dataSource = this.props.dataSource;
-        let indexElement = dataSource.indexOf(item);
-        if(indexElement > -1){
-            dataSource.splice(indexElement, 1);
-            this.props.setState({
-                dataSource: dataSource
-            });
-            DAOAndroidStorage.putObjectWithKey(Constant.modelMediator.REPOSITORY, dataSource)
-                .catch(error => {
-                    this.props.doError(error.message);
-                });
-        }
+    let dataSource = this.props.dataSource;
+    let indexElement = dataSource.indexOf(item);
+    if (indexElement > -1) {
+      dataSource.splice(indexElement, 1);
+      this.props.setState({
+        dataSource: dataSource,
+      });
+      DAOAndroidStorage.putObjectWithKey(
+        Constant.modelMediator.REPOSITORY,
+        dataSource,
+      ).catch(error => {
+        this.props.doError(error.message);
+      });
     }
+  }
 
-    onRefresh() {
-        this.setState({refreshing: true}); // I can remove this line?
-        this.props.onRefresh(true);
-        this.setState({
-            refreshing: false,
-        });
-    }
+  onRefresh() {
+    this.setState({refreshing: true}); // I can remove this line?
+    this.props.onRefresh(true);
+    this.setState({
+      refreshing: false,
+    });
+  }
 
-    render() {
-        let {dataSource} = this.props;
-        return (
-            <View style={ComponentStyle.viewComponent}>
-                <FlatList style={ComponentStyle.flatList}
-                    onRefresh={() => this.onRefresh()}
-                    refreshing={this.state.refreshing === true}
-                    data={dataSource}
-                    extraData={this.props}
-                    renderItem={({item}) => (
-                        <CardTime
-                            cityName={item.name}
-                            cityTime={Util.doPrintTime(item.time)}
-                            onRemove={() => this.doRemoveItem(item)}
-                        />
-                    )}
-                    ListFooterComponent={<View style={{ height: 0, marginBottom: 150 }}></View>}
-                    keyExtractor={(item, index) => item.id.toString()}
-                />
-            </View>
-        );
-    }
+  render() {
+    let {dataSource} = this.props;
+    return (
+      <View style={ComponentStyle.viewComponent}>
+        <FlatList
+          style={ComponentStyle.flatList}
+          onRefresh={() => this.onRefresh()}
+          refreshing={this.state.refreshing === true}
+          data={dataSource}
+          extraData={this.props}
+          renderItem={({item}) => (
+            <CardTime
+              cityName={item.name}
+              cityTime={Util.doPrintTime(item.time)}
+              onRemove={() => this.doRemoveItem(item)}
+            />
+          )}
+          ListFooterComponent={<View style={{height: 0, marginBottom: 150}} />}
+          keyExtractor={(item, index) => item.id.toString()}
+        />
+      </View>
+    );
+  }
 }
 
 export default withTheme(ScrollViewCardsTime);

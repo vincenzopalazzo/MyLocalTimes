@@ -15,44 +15,58 @@
  */
 'use strict';
 
+import Util from '../Util';
+
 const LOG_TAG = new Date().toISOString() + ' ' + 'CityTime.js';
 
 class CityTime {
-
-    static fromJsonToClass(jsonValue){
-        if(!jsonValue){
-            throw new Error('JSOn value null');
-        }
-        console.debug(LOG_TAG, 'City name: ', jsonValue.name);
-        console.debug(LOG_TAG, 'City difference: ', jsonValue.difference);
-        console.debug(LOG_TAG, 'City urlOnline: ', jsonValue.urlOnline);
-        console.debug(LOG_TAG, 'City time: ', jsonValue.time);
-        let newDate = new Date(jsonValue.time);
-        return new CityTime(jsonValue.name, jsonValue.difference, jsonValue.urlOnline, newDate);
+  static fromJsonToClass(jsonValue) {
+    if (!jsonValue) {
+      throw new Error('JSOn value null');
     }
+    console.debug(LOG_TAG, 'City name: ', jsonValue.name);
+    console.debug(LOG_TAG, 'Country name: ', jsonValue.country);
+    console.debug(LOG_TAG, 'City difference: ', jsonValue.difference);
+    console.debug(LOG_TAG, 'City urlOnline: ', jsonValue.urlOnline);
+    console.debug(LOG_TAG, 'City time: ', jsonValue.time);
+    let newDate = new Date(jsonValue.time);
+    return new CityTime(
+      jsonValue.name,
+      jsonValue.country,
+      jsonValue.difference,
+      jsonValue.urlOnline,
+      newDate,
+    );
+  }
 
-    constructor(name, difference, url, time = new Date()) {
-        this.id = Math.random();
-        this.name = name;
-        this.difference = difference;
-        this.urlOnline = url;
-        this.time = time;
+  // This.name = this.country is necessary  because the API have some timezone with only country name
+  constructor(name, country, difference, url, time = new Date()) {
+    this.id = Math.random();
+    this.name = name;
+    this.country = Util.doCapitalizeString(country);
+    if (!this.name) {
+      this.name = this.country;
     }
+    this.name = Util.doCapitalizeString(this.name);
+    this.difference = difference;
+    this.urlOnline = url;
+    this.time = time;
+  }
 
-    _differenceByNow(){
-        let nowDate = new Date();
-        nowDate.setHours(nowDate.setHours() + this.difference);
-        this.time = nowDate;
-    }
+  _differenceByNow() {
+    let nowDate = new Date();
+    nowDate.setHours(nowDate.setHours() + this.difference);
+    this.time = nowDate;
+  }
 
-    updateTimeWithData(date){
-        this.time = date;
-    }
+  updateTimeWithData(date) {
+    this.time = date;
+  }
 
-    toString() {
-        //this._differenceByNow()
-        return this.time.toTimeString().substr(0, 5);
-    }
+  toString() {
+    //this._differenceByNow()
+    return this.time.toTimeString().substr(0, 5);
+  }
 }
 
 export default CityTime;

@@ -13,20 +13,24 @@
  * You should have received a copy of the GNU General Public License along with this program;
  * if not, write to the Free Software Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  */
+
 'use strict';
 
-import {DefaultTheme} from 'react-native-paper';
+import {DarkTheme, DefaultTheme} from 'react-native-paper';
 
 export default {
-        lite: {
-            ...DefaultTheme,
-            roundness: 2,
-            mode: 'exact',
-            colors: {
-                ...DefaultTheme.colors,
-                primary: '#2780E3',
-                accent: '#1967BE',
-                backgroundSnackBar: '#373A3C',
-            },
-        }
-}
+  lite: {
+    ...DefaultTheme,
+    roundness: 2,
+    mode: 'exact',
+    colors: {
+      ...DefaultTheme.colors,
+      primary: '#2780E3',
+      accent: '#1967BE',
+      backgroundSnackBar: '#373A3C',
+    },
+  },
+  dark: {
+    ...DarkTheme,
+  },
+};

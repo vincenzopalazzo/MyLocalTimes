@@ -15,33 +15,33 @@
  */
 'use strict';
 
-import {StyleSheet} from 'react-native'
+import {StyleSheet} from 'react-native';
 
 export default StyleSheet.create({
-    viewStyle: {
-        flex: 1,
-        flexDirection: 'row',
-        justifyContent: 'space-between'
-    },
-    timeLabel: {
-        textAlign: 'center',
-        fontSize: 35
-    },
-    nameLabel: {
-        textAlign: 'left',
-        margin: 5,
-        marginLeft: 15,
-        fontSize: 18
-    },
-    updateLabel: {
-        textAlign: 'right',
-        margin: 5,
-        marginRight: 15,
-        fontSize: 18
-    },
-    surface: {
-        padding: 8,
-        elevation: 4,
-    },
-    badge: {}
+  viewStyle: {
+    flex: 1,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+  },
+  timeLabel: {
+    textAlign: 'center',
+    fontSize: 35,
+  },
+  nameLabel: {
+    textAlign: 'left',
+    margin: 5,
+    marginLeft: 15,
+    fontSize: 18,
+  },
+  updateLabel: {
+    textAlign: 'right',
+    margin: 5,
+    marginRight: 15,
+    fontSize: 18,
+  },
+  surface: {
+    padding: 8,
+    elevation: 4,
+  },
+  badge: {},
 });

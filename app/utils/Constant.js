@@ -16,8 +16,17 @@
 'use strict';
 
 export default {
-    modelMediator: {
-        REPOSITORY: 'REPOSITORY',
-        INIT: 'INIT'
-    }
+  modelMediator: {
+    REPOSITORY: 'REPOSITORY',
+    INIT: 'INIT',
+  },
+  language: {
+    HOME_titleAppBar: 'HOME_titleAppBar',
+    HOME_newTimeZone: 'HOME_newTimeZone',
+    HOME_createNewTimezone: 'HOME_createNewTimezone',
+    SNACKBAR_successUpdateDataset: 'SNACKBAR_successUpdateDataset',
+    SNACKBAR_failUpdateDataset: 'SNACKBAR_failUpdateDataset',
+    SNACKBAR_connectionFail: 'SNACKBAR_connectionFail',
+    SNACKBAR_textButtonClose: 'SNACKBAR_textButtonClose',
+  },
 };

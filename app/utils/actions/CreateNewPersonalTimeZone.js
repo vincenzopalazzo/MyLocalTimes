@@ -15,41 +15,55 @@
  */
 'use strict';
 
-import CityTime from '../model/CityTime'
-import ObtainTimeZoneToAPI from "./ObtainTimeZoneToAPI";
+import CityTime from '../model/CityTime';
+import ObtainTimeZoneToAPI from './ObtainTimeZoneToAPI';
 
 const LOG_TAG = new Date().toISOString() + ' ' + 'CreateNewPersonalTimeZone.js';
 
 class CreateNewPersonalTimeZone {
+  constructor() {}
 
-    constructor() {}
-
-    static async doAction(cityName, countryName) {
-        if (!cityName && !countryName) {
-            throw new Error('County name or/and City name isn\'t valid');
-        }
-        try {
-            return await ObtainTimeZoneToAPI.createRequestByName(cityName, countryName).then(jsonResponse => {
-                console.debug(LOG_TAG, jsonResponse);
-                let newDate = new Date(jsonResponse.year,
-                    jsonResponse.month,
-                    jsonResponse.day,
-                    jsonResponse.hours,
-                    jsonResponse.minutes,
-                    jsonResponse.seconds,
-                    jsonResponse.millis);
-                let newCityTime = new CityTime(cityName, 0, jsonResponse.cityUrl, newDate);
-                console.debug(LOG_TAG, newCityTime);
-                return newCityTime;
-            }).catch(error => {
-                console.error(error);
-                throw error;
-            });
-        } catch (e) {
-            console.error(e);
-            throw e;
-        }
+  //The city name with the API should be null
+  static async doAction(cityName, countryName) {
+    if (!countryName) {
+      throw new Error("County name isn't valid");
     }
+    try {
+      return await ObtainTimeZoneToAPI.createRequestByName(
+        cityName,
+        countryName,
+      )
+        .then(jsonResponse => {
+          console.debug(LOG_TAG, jsonResponse);
+          let newDate = new Date(
+            jsonResponse.year,
+            jsonResponse.month,
+            jsonResponse.day,
+            jsonResponse.hours,
+            jsonResponse.minutes,
+            jsonResponse.seconds,
+            jsonResponse.millis,
+          );
+          // some cityTime have only the name, like turkey
+          let newCityTime = new CityTime(
+            cityName,
+            countryName,
+            0,
+            jsonResponse.cityUrl,
+            newDate,
+          );
+          console.debug(LOG_TAG, newCityTime);
+          return newCityTime;
+        })
+        .catch(error => {
+          console.error(error);
+          throw error;
+        });
+    } catch (e) {
+      console.error(e);
+      throw e;
+    }
+  }
 }
 
 export default CreateNewPersonalTimeZone;

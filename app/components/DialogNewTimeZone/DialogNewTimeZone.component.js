@@ -17,144 +17,136 @@
 
 import React, {Component} from 'react';
 
-import {
-    View,
-} from 'react-native';
+import {View} from 'react-native';
 
-import {
-    BottomModal,
-    ModalContent,
-    ModalTitle,
-} from 'react-native-modals';
+import {BottomModal, ModalContent, ModalTitle} from 'react-native-modals';
 import {Button, Chip, withTheme, TextInput} from 'react-native-paper';
-import NetInfo from "@react-native-community/netinfo";
+import NetInfo from '@react-native-community/netinfo';
 
 import DialogNewTimeZoneStyle from './DialogNewTimeZone.component.style';
 
 import CreateNewPersonalTimeZone from '../../utils/actions/CreateNewPersonalTimeZone';
-import KeyboardSpacer from "react-native-keyboard-spacer";
-import Util from "../../utils/Util";
+import KeyboardSpacer from 'react-native-keyboard-spacer';
 
 const LOG_TAG = new Date().toISOString() + ' ' + 'DialogNewTimeZone.js';
 
 class DialogNewTimeZone extends Component {
+  constructor(props) {
+    super(props);
 
-    constructor(props) {
-        super(props);
+    this.state = {
+      nameCity: undefined,
+      nameCountry: undefined,
+      unsubscribeNetworkEvent: undefined,
+      componentEnabled: true,
+    };
 
-        this.state = {
-            nameCity: undefined,
-            nameCountry: undefined,
-            unsubscribeNetworkEvent: undefined,
-            componentEnabled: true,
-        };
+    this.doCreateNewTimeZone = this.doCreateNewTimeZone.bind(this);
+  }
 
-        this.doCreateNewTimeZone = this.doCreateNewTimeZone.bind(this);
-    }
-
-    async doCreateNewTimeZone() {
-        try {
-            this.setState({
-                componentEnabled: false,
-            });
-            await CreateNewPersonalTimeZone.doAction(this.state.nameCity, this.state.nameCountry).then(newCityTime => {
-                console.debug(LOG_TAG, 'New City created: ', newCityTime);
-                if (newCityTime !== undefined /* && newCityTime instanceof CityTime */) {
-                    this.props.onSubmit(newCityTime);
-                } else {
-                    this.props.onComunicate(false, 'Error when add your chose to server');
-                }
-            }).done(() => {
-                this.setState({
-                    componentEnabled: true,
-                });
-            });
-        } catch (e) {
-            console.error(LOG_TAG, e);
-            this.props.onComunicate(false, e.message);
-        }
-    }
-
-    componentDidMount(){
-        let unsubscribe = NetInfo.addEventListener(state => {
-            this.setState({
-                componentEnabled: state.isConnected,
-            });
-        });
-        this.setState({
-            unsubscribeNetworkEvent: unsubscribe
+  async doCreateNewTimeZone() {
+    try {
+      this.setState({
+        componentEnabled: false,
+      });
+      await CreateNewPersonalTimeZone.doAction(
+        this.state.nameCity,
+        this.state.nameCountry,
+      )
+        .then(newCityTime => {
+          console.debug(LOG_TAG, 'New City created: ', newCityTime);
+          if (
+            newCityTime !== undefined /* && newCityTime instanceof CityTime */
+          ) {
+            this.props.onSubmit(newCityTime);
+          } else {
+            this.props.onComunicate(
+              false,
+              'Error when add your chose to server',
+            );
+          }
         })
+        .done(() => {
+          this.setState({
+            componentEnabled: true,
+          });
+        });
+    } catch (e) {
+      console.error(LOG_TAG, e);
+      this.props.onComunicate(false, e.message);
     }
+  }
 
-    componentWillUnmount(){
-        let unsubscribeNetworkEvent = this.state.unsubscribeNetworkEvent;
-        if(unsubscribeNetworkEvent !== undefined){
-            unsubscribeNetworkEvent();
-        }
+  componentDidMount() {
+    let unsubscribe = NetInfo.addEventListener(state => {
+      this.setState({
+        componentEnabled: state.isConnected,
+      });
+    });
+    this.setState({
+      unsubscribeNetworkEvent: unsubscribe,
+    });
+  }
+
+  componentWillUnmount() {
+    let unsubscribeNetworkEvent = this.state.unsubscribeNetworkEvent;
+    if (unsubscribeNetworkEvent !== undefined) {
+      unsubscribeNetworkEvent();
     }
+  }
 
+  render() {
+    let {dialogVisible: visible, title} = this.props;
+    return (
+      <View>
+        <BottomModal
+          width={0.9}
+          rounded
+          visible={visible}
+          onClose={this.props.onClose}
+          onTouchOutside={() => this.props.setState({dialogVisible: false})}
+          onSwipeOut={() => this.props.setState({dialogVisible: false})}
+          modalTitle={<ModalTitle title={title} hasTitleBar />}>
+          <ModalContent>
+            <TextInput
+              style={DialogNewTimeZoneStyle.textInput}
+              placeholder={'EX: Rome, Phoenix'}
+              label={'City name'}
+              disabled={!this.state.componentEnabled}
+              theme={this.props.theme}
+              onChangeText={text => this.setState({nameCity: text})}
+            />
 
-    render() {
-        let {
-            dialogVisible: visible,
-            title,
-        } = this.props;
-        return (
-            <View>
-                <BottomModal
-                    width={0.9}
-                    rounded
-                    visible={visible}
-                    onClose={this.props.onClose}
-                    onTouchOutside={() =>
-                        this.props.setState({dialogVisible: false})
-                    }
-                    onSwipeOut={() => this.props.setState({dialogVisible: false})}
-                    modalTitle={
-                        <ModalTitle
-                            title={title}
-                            hasTitleBar
-                        />
-                    }
-                >
-                    <ModalContent>
-                        <TextInput
-                            style={DialogNewTimeZoneStyle.textInput}
-                            placeholder={'EX: Rome, Phoenix'}
-                            label={'City name'}
-                            disabled={!this.state.componentEnabled}
-                            theme={this.props.theme}
-                            onChangeText={(text) => this.setState({nameCity: text})}
-                        />
-
-                        <TextInput
-                            style={DialogNewTimeZoneStyle.textInput}
-                            placeholder={'Ex: Europe, America'}
-                            label={'County'}
-                            disabled={!this.state.componentEnabled}
-                            theme={this.props.theme}
-                            onChangeText={(text) => this.setState({nameCountry: text})}
-                        />
-                        <View style={DialogNewTimeZoneStyle.buttonsDialog}>
-                            <Button icon='magnify'
-                                    mode='contained'
-                                    theme={this.props.theme}
-                                    disabled={!this.state.componentEnabled}
-                                    onPress={() => this.doCreateNewTimeZone()}
-                            >
-                                Search
-                            </Button>
-                        </View>
-                        <Chip style={DialogNewTimeZoneStyle.chipInfo} icon="information"
-                              onPress={() => console.log('Pressed')}>Info</Chip>
-                        {Platform.OS === 'ios' && <KeyboardSpacer/>}
-                    </ModalContent>
-                </BottomModal>
-
+            <TextInput
+              style={DialogNewTimeZoneStyle.textInput}
+              placeholder={'Ex: Europe, America'}
+              label={'County'}
+              disabled={!this.state.componentEnabled}
+              theme={this.props.theme}
+              onChangeText={text => this.setState({nameCountry: text})}
+            />
+            <View style={DialogNewTimeZoneStyle.buttonsDialog}>
+              <Button
+                icon="magnify"
+                mode="contained"
+                theme={this.props.theme}
+                disabled={!this.state.componentEnabled}
+                onPress={() => this.doCreateNewTimeZone()}>
+                Search
+              </Button>
             </View>
-        );
-    }
+            <Chip
+              style={DialogNewTimeZoneStyle.chipInfo}
+              icon="information"
+              onPress={() => console.log('Pressed')}>
+              Info
+            </Chip>
+            {Platform.OS === 'ios' && <KeyboardSpacer />}
+          </ModalContent>
+        </BottomModal>
+      </View>
+    );
+  }
 }
-
 
 export default withTheme(DialogNewTimeZone);

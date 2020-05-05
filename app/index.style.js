@@ -19,27 +19,29 @@ import {StyleSheet, Platform} from 'react-native';
 import DeviceInfo from 'react-native-device-info';
 
 export default StyleSheet.create({
-    droidSafeAreaTop: {
-        flex: 0,
-        backgroundColor: '#2780E3',
-        paddingTop: (Platform.OS === 'android' && DeviceInfo.hasNotch === true) ? 25 : 0,
-    },
-    droidSafeAreaDown: {
-        flex: 1,
-        //backgroundColor: '#2780E3',
-        paddingBottom: (Platform.OS === 'ios' && DeviceInfo.hasNotch === true) ? 10 : 0,
-    },
-    appBar: {
-        height: 65,
-    },
-    loadingIndicator: {
-        position: 'absolute',
-        margin: 16,
-        right: '45%',
-        top: '80%',
-    },
-    snackbar: {
-        backgroundColor: '#373A3C',
-        margin: 25
-    }
+  droidSafeAreaTop: {
+    flex: 0,
+    backgroundColor: '#2780E3',
+    paddingTop:
+      Platform.OS === 'android' && DeviceInfo.hasNotch === true ? 25 : 0,
+  },
+  droidSafeAreaDown: {
+    flex: 1,
+    //backgroundColor: '#2780E3',
+    paddingBottom:
+      Platform.OS === 'ios' && DeviceInfo.hasNotch === true ? 10 : 0,
+  },
+  appBar: {
+    height: 65,
+  },
+  loadingIndicator: {
+    position: 'absolute',
+    margin: 16,
+    right: '45%',
+    top: '80%',
+  },
+  snackbar: {
+    backgroundColor: '#373A3C',
+    margin: 25,
+  },
 });

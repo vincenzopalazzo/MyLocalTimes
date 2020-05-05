@@ -19,42 +19,41 @@ import AsyncStorage from '@react-native-community/async-storage';
 
 const LOG_TAG = new Date().toISOString() + ' ' + 'DAOAndroidStorage.js';
 
-class DAOAndroidStorage{
-
-    static async putObjectWithKey(key, object){
-        if(!key || !object){
-            throw new Error('Key or object are null');
-        }
-        try{
-            await AsyncStorage.setItem(key, JSON.stringify(object));
-        }catch (e) {
-            throw e;
-        }
+class DAOAndroidStorage {
+  static async putObjectWithKey(key, object) {
+    if (!key || !object) {
+      throw new Error('Key or object are null');
     }
-
-    static async getObjectWithKey(key){
-        if(!key){
-            throw new Error('Key is null');
-        }
-        try{
-             return await AsyncStorage.getItem(key)
-                 .then(item => JSON.parse(item))
-                 .then(objectItem => {
-                     console.log(LOG_TAG, ' INSIDE METHOD: ', objectItem);
-                     return objectItem;
-                 });
-        }catch (e) {
-            throw e;
-        }
+    try {
+      await AsyncStorage.setItem(key, JSON.stringify(object));
+    } catch (e) {
+      throw e;
     }
+  }
 
-    static async mergeObjectWithKey(key){
-        if(!key){
-            throw new Error('Key is null');
-        }
-        //TODO
-        throw new Error('method mergeObjectWithKey not implemented')
+  static async getObjectWithKey(key) {
+    if (!key) {
+      throw new Error('Key is null');
     }
+    try {
+      return await AsyncStorage.getItem(key)
+        .then(item => JSON.parse(item))
+        .then(objectItem => {
+          console.log(LOG_TAG, ' INSIDE METHOD: ', objectItem);
+          return objectItem;
+        });
+    } catch (e) {
+      throw e;
+    }
+  }
+
+  static async mergeObjectWithKey(key) {
+    if (!key) {
+      throw new Error('Key is null');
+    }
+    //TODO
+    throw new Error('method mergeObjectWithKey not implemented');
+  }
 }
 
 export default DAOAndroidStorage;

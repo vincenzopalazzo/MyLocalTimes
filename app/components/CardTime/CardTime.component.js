@@ -19,69 +19,67 @@ import React, {Component} from 'react';
 
 import {Text, View} from 'react-native';
 
-import {IconButton, Banner, Card, withTheme} from "react-native-paper";
+import {IconButton, Banner, Card, withTheme} from 'react-native-paper';
 
 import CardTimeStyle from './CardTime.component.style';
 
 const LOG_TAG = new Date().toISOString() + ' ' + 'CardTime.js';
 
 class CardTime extends Component {
+  constructor(props) {
+    super(props);
 
-    constructor(props) {
-        super(props);
+    this.state = {
+      bannerVisible: false,
+    };
+  }
 
-        this.state = {
-            bannerVisible: false
-        }
-    }
-
-    render() {
-        let {
-            cityName,
-            cityTime,
-            onRemove
-        } = this.props;
-        console.debug(LOG_TAG, cityName);
-        console.debug(LOG_TAG, cityTime);
-        return (
-            <View>
-                <Card theme={this.props.theme}>
-                    <Card.Content>
-                        <View style={CardTimeStyle.viewStyle}>
-                            <Text style={CardTimeStyle.nameLabel}>{cityName}</Text>
-                            <IconButton
-                                style={CardTimeStyle.updateLabel}
-                                size={18}
-                                icon="settings"
-                                onPress={() => this.setState({bannerVisible: !this.state.bannerVisible})}
-                            />
-                        </View>
-                        <Text style={CardTimeStyle.timeLabel}>{cityTime}</Text>
-                    </Card.Content>
-                </Card>
-                <Banner contentStyle={CardTimeStyle.badge}
-                    visible={this.state.bannerVisible}
-                    actions={[
-                        {
-                            label: 'Delete',
-                            icon: 'delete',
-                            onPress: () => onRemove(),
-                        },
-                        {
-                            label: 'Update',
-                            icon: 'update',
-                            onPress: () => this.setState({ bannerVisible: false }),
-                        },
-                        {
-                            label: 'Close',
-                            icon: 'close',
-                            onPress: () => this.setState({ bannerVisible: false }),
-                        }
-                    ]}
-                />
+  render() {
+    let {cityName, cityTime, onRemove} = this.props;
+    console.debug(LOG_TAG, cityName);
+    console.debug(LOG_TAG, cityTime);
+    return (
+      <View>
+        <Card theme={this.props.theme}>
+          <Card.Content>
+            <View style={CardTimeStyle.viewStyle}>
+              <Text style={CardTimeStyle.nameLabel}>{cityName}</Text>
+              <IconButton
+                style={CardTimeStyle.updateLabel}
+                size={18}
+                icon="settings"
+                onPress={() =>
+                  this.setState({bannerVisible: !this.state.bannerVisible})
+                }
+              />
             </View>
-        );
-    }
+            <Text style={CardTimeStyle.timeLabel}>{cityTime}</Text>
+          </Card.Content>
+        </Card>
+        <Banner
+          contentStyle={CardTimeStyle.badge}
+          visible={this.state.bannerVisible}
+          actions={[
+            {
+              label: 'Delete',
+              icon: 'delete',
+              onPress: () => onRemove(),
+            },
+            {
+              label: 'Update',
+              icon: 'update',
+              onPress: () => this.setState({bannerVisible: false}),
+            },
+            {
+              label: 'Close',
+              icon: 'close',
+              onPress: () => this.setState({bannerVisible: false}),
+            },
+          ]}
+        />
+      </View>
+    );
+  }
 }
 
 export default withTheme(CardTime);

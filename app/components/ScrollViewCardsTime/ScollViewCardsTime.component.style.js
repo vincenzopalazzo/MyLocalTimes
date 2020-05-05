@@ -15,21 +15,19 @@
  */
 'use strict';
 
-import {
-    StyleSheet
-} from 'react-native';
+import {StyleSheet} from 'react-native';
 
 export default StyleSheet.create({
-    viewComponent: {
-      height: '100%'
-    },
-    fab: {
-        position: 'absolute',
-        margin: 16,
-        right: 0,
-        bottom: 0,
-    },
-    flatList: {
-        paddingBottom: 20
-    }
+  viewComponent: {
+    height: '100%',
+  },
+  fab: {
+    position: 'absolute',
+    margin: 16,
+    right: 0,
+    bottom: 0,
+  },
+  flatList: {
+    paddingBottom: 20,
+  },
 });
