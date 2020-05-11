@@ -28,5 +28,6 @@ export default {
     SNACKBAR_failUpdateDataset: 'SNACKBAR_failUpdateDataset',
     SNACKBAR_connectionFail: 'SNACKBAR_connectionFail',
     SNACKBAR_textButtonClose: 'SNACKBAR_textButtonClose',
+    DRAWER_TITLE: 'DRAWER_TITLE',
   },
 };

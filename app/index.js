@@ -14,19 +14,13 @@
  * if not, write to the Free Software Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  */
 
-'use strict';
-
 import GlobalStyle from './index.style';
 import ThemeManager from './Theme.style';
 
 import React, {Component} from 'react';
 
-import {SafeAreaView, StatusBar} from 'react-native';
-
 import {
   Provider as PaperProvider,
-  Appbar,
-  Avatar,
   FAB,
   Snackbar,
   ActivityIndicator,
@@ -44,11 +38,16 @@ import NetInfo from '@react-native-community/netinfo';
 
 import LanguageProvider from './utils/LanguageProvider';
 import Constant from './utils/Constant';
+import MyLocalTimeAppBar from './components/LocalTimeDrawer/LocalTimeDrawer.component';
+import {SafeAreaView, View} from 'react-native';
 
 const LOG_TAG = new Date().toISOString() + ' ' + 'index.js';
 
 const LITE_THEME = ThemeManager.lite;
 
+/**
+ * @author https://github.com/vincenzopalazzo
+ */
 class MyBetweenTime extends Component {
   constructor(props) {
     super(props);
@@ -296,31 +295,8 @@ class MyBetweenTime extends Component {
   render() {
     return (
       <PaperProvider theme={LITE_THEME}>
-        <StatusBar
-          backgroundColor={LITE_THEME.colors.primary}
-          barStyle="light-content"
-        />
-        <SafeAreaView style={GlobalStyle.droidSafeAreaTop} />
         <SafeAreaView style={GlobalStyle.droidSafeAreaDown}>
-          <Appbar.Header style={GlobalStyle.appBar}>
-            <Avatar.Image size={35} source={require('./assets/avatar.png')} />
-            <Appbar.Content
-              title={LanguageProvider.getInstance().getTranslate(
-                Constant.language.HOME_titleAppBar,
-              )}
-            />
-            <Appbar.Action
-              icon="refresh"
-              disabled={!this.state.networkStatus}
-              onPress={() => {
-                this.doUpdateDataSourceWithAPI(this.state.dataSource).catch(
-                  error => {
-                    this.doPrintError(error.message);
-                  },
-                );
-              }}
-            />
-          </Appbar.Header>
+          <MyLocalTimeAppBar />
           <ScrollViewCardsTime
             data={this.state.dataSource}
             onComunicate={this.doCloseSnackBar}
@@ -366,7 +342,9 @@ class MyBetweenTime extends Component {
             visible={this.state.toastVisible}
             onDismiss={() => this.doCloseSnackBar(true)}
             action={{
-              label: LanguageProvider.getInstance().getTranslate(Constant.language.SNACKBAR_textButtonClose),
+              label: LanguageProvider.getInstance().getTranslate(
+                Constant.language.SNACKBAR_textButtonClose,
+              ),
               onPress: () => {
                 this.doCloseSnackBar(true);
               },

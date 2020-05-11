@@ -6,4 +6,5 @@ export default {
   SNACKBAR_failUpdateDataset: 'Impossibile aggiornare i dati',
   SNACKBAR_connectionFail: 'Connessione disabilitata',
   SNACKBAR_textButtonClose: 'Chiudi',
+  DRAWER_TITLE: 'Impostazioni',
 };

@@ -6,4 +6,5 @@ export default {
   SNACKBAR_failUpdateDataset: 'Time update for each country',
   SNACKBAR_connectionFail: 'Connection not enabled',
   SNACKBAR_textButtonClose: 'Close',
+  DRAWER_TITLE: 'Setting',
 };
