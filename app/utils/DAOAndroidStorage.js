@@ -27,6 +27,7 @@ class DAOAndroidStorage {
     try {
       await AsyncStorage.setItem(key, JSON.stringify(object));
     } catch (e) {
+      console.warn(LOG_TAG, `Error generated is ${e.message}`);
       throw e;
     }
   }
@@ -36,13 +37,10 @@ class DAOAndroidStorage {
       throw new Error('Key is null');
     }
     try {
-      return await AsyncStorage.getItem(key)
-        .then(item => JSON.parse(item))
-        .then(objectItem => {
-          console.log(LOG_TAG, ' INSIDE METHOD: ', objectItem);
-          return objectItem;
-        });
+      let item = await AsyncStorage.getItem(key);
+      return JSON.parse(item);
     } catch (e) {
+      console.warn(LOG_TAG, `Error generated is ${e.message}`);
       throw e;
     }
   }

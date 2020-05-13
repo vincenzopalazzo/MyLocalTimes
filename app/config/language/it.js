@@ -7,4 +7,7 @@ export default {
   SNACKBAR_connectionFail: 'Connessione disabilitata',
   SNACKBAR_textButtonClose: 'Chiudi',
   DRAWER_TITLE: 'Impostazioni',
+  CARD_VIEW_BANNER_DELETE: 'Cancella',
+  CARD_VIEW_BANNER_CLOSE: 'Chiudi',
+  CARD_VIEW_BANNER_ADD_ALARM: 'Sveglia',
 };

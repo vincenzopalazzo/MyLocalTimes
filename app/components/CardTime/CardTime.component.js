@@ -13,6 +13,7 @@
  * You should have received a copy of the GNU General Public License along with this program;
  * if not, write to the Free Software Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  */
+
 'use strict';
 
 import React, {Component} from 'react';
@@ -22,6 +23,8 @@ import {Text, View} from 'react-native';
 import {IconButton, Banner, Card, withTheme} from 'react-native-paper';
 
 import CardTimeStyle from './CardTime.component.style';
+import LanguageProvider from '../../utils/LanguageProvider';
+import Constant from '../../utils/Constant';
 
 const LOG_TAG = new Date().toISOString() + ' ' + 'CardTime.js';
 
@@ -38,6 +41,15 @@ class CardTime extends Component {
     let {cityName, cityTime, onRemove} = this.props;
     console.debug(LOG_TAG, cityName);
     console.debug(LOG_TAG, cityTime);
+    let deleteTextButton = LanguageProvider.getInstance().getTranslate(
+      Constant.language.CARD_VIEW_BANNER_DELETE,
+    );
+    let addAlarmTextButton = LanguageProvider.getInstance().getTranslate(
+      Constant.language.CARD_VIEW_BANNER_ADD_ALARM,
+    );
+    let closeTextButton = LanguageProvider.getInstance().getTranslate(
+      Constant.language.CARD_VIEW_BANNER_CLOSE,
+    );
     return (
       <View>
         <Card theme={this.props.theme}>
@@ -61,17 +73,17 @@ class CardTime extends Component {
           visible={this.state.bannerVisible}
           actions={[
             {
-              label: 'Delete',
+              label: `${deleteTextButton}`,
               icon: 'delete',
               onPress: () => onRemove(),
             },
             {
-              label: 'Update',
-              icon: 'update',
+              label: `${addAlarmTextButton}`,
+              icon: 'alarm_add',
               onPress: () => this.setState({bannerVisible: false}),
             },
             {
-              label: 'Close',
+              label: `${closeTextButton}`,
               icon: 'close',
               onPress: () => this.setState({bannerVisible: false}),
             },

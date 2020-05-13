@@ -16,7 +16,10 @@
 'use strict';
 
 let _SINGLETON;
-//@deprecated
+
+/**
+ * @deprecated This was implement inside the first version before to implement the persistence
+ */
 class ModelMediatorSingleton {
   constructor() {
     this.repository = new Map([]);

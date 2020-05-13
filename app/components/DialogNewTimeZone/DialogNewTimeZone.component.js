@@ -49,28 +49,16 @@ class DialogNewTimeZone extends Component {
       this.setState({
         componentEnabled: false,
       });
-      await CreateNewPersonalTimeZone.doAction(
+      let newLocalTimeZoneCity = CreateNewPersonalTimeZone.createNewTimeZone(
         this.state.nameCity,
         this.state.nameCountry,
-      )
-        .then(newCityTime => {
-          console.debug(LOG_TAG, 'New City created: ', newCityTime);
-          if (
-            newCityTime !== undefined /* && newCityTime instanceof CityTime */
-          ) {
-            this.props.onSubmit(newCityTime);
-          } else {
-            this.props.onComunicate(
-              false,
-              'Error when add your chose to server',
-            );
-          }
-        })
-        .done(() => {
-          this.setState({
-            componentEnabled: true,
-          });
-        });
+      );
+      this.props.onSubmit(newLocalTimeZoneCity);
+      this.setState({
+        nameCity: '',
+        nameCountry: '',
+        componentEnabled: true,
+      });
     } catch (e) {
       console.error(LOG_TAG, e);
       this.props.onComunicate(false, e.message);

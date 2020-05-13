@@ -13,17 +13,22 @@
  * You should have received a copy of the GNU General Public License along with this program;
  * if not, write to the Free Software Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  */
+
 'use strict';
 
 import CityTime from '../model/CityTime';
 import ObtainTimeZoneToAPI from './ObtainTimeZoneToAPI';
+import MomentTimeZone from './MomentTimeZone';
+import TimeZoneCity from '../model/TimeZoneCity';
 
 const LOG_TAG = new Date().toISOString() + ' ' + 'CreateNewPersonalTimeZone.js';
 
 class CreateNewPersonalTimeZone {
   constructor() {}
 
-  //The city name with the API should be null
+  /** The city name with the API could be null
+   * @deprecated This function used the exsternal API, in the official app version this is deprecated.
+   */
   static async doAction(cityName, countryName) {
     if (!countryName) {
       throw new Error("County name isn't valid");
@@ -63,6 +68,33 @@ class CreateNewPersonalTimeZone {
       console.error(e);
       throw e;
     }
+  }
+
+  static createNewTimeZone(cityName, countryName) {
+    if (!countryName) {
+      throw new Error(
+        `Error, the country name should be not undefined, but the value now is ${countryName}`,
+      );
+    }
+    let onlyCountry = false;
+    if (!cityName) {
+      onlyCountry = true;
+    }
+
+    let timezone;
+    if (onlyCountry === true) {
+      timezone = MomentTimeZone.timeZoneWithCountry(countryName);
+    } else {
+      timezone = MomentTimeZone.timeZoneWithCityAnCountry(
+        cityName,
+        countryName,
+      );
+    }
+    return new TimeZoneCity({
+      city: cityName,
+      country: countryName,
+      time: timezone,
+    });
   }
 }
 

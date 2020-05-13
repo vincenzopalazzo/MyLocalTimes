@@ -13,6 +13,7 @@
  * You should have received a copy of the GNU General Public License along with this program;
  * if not, write to the Free Software Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  */
+
 'use strict';
 
 import ComponentStyle from './ScollViewCardsTime.component.style';
@@ -24,7 +25,6 @@ import {withTheme} from 'react-native-paper';
 
 import CardTime from '../CardTime/CardTime.component';
 
-import Util from '../../utils/Util';
 import DAOAndroidStorage from '../../utils/DAOAndroidStorage';
 import Constant from '../../utils/Constant';
 
@@ -62,8 +62,8 @@ class ScrollViewCardsTime extends Component {
   }
 
   onRefresh() {
-    this.setState({refreshing: true}); // I can remove this line?
-    this.props.onRefresh(true);
+    this.setState({refreshing: true});
+    this.props.onRefresh();
     this.setState({
       refreshing: false,
     });
@@ -81,13 +81,13 @@ class ScrollViewCardsTime extends Component {
           extraData={this.props}
           renderItem={({item}) => (
             <CardTime
-              cityName={item.name}
-              cityTime={Util.doPrintTime(item.time)}
+              cityName={item.toString()}
+              cityTime={item.time}
               onRemove={() => this.doRemoveItem(item)}
             />
           )}
           ListFooterComponent={<View style={{height: 0, marginBottom: 150}} />}
-          keyExtractor={(item, index) => item.id.toString()}
+          keyExtractor={item => item.id.toString()}
         />
       </View>
     );

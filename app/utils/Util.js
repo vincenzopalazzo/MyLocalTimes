@@ -72,7 +72,10 @@ class Util {
 
   static doCapitalizeString(notCapitalizedString) {
     if (!notCapitalizedString) {
-      throw new Error(`String: ${notCapitalizedString} inside method `);
+      throw new Error(
+        LOG_TAG,
+        `String: ${notCapitalizedString} inside method doCapitalizeString`,
+      );
     }
     return (
       notCapitalizedString.charAt(0).toUpperCase() +

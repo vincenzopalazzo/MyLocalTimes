@@ -69,3 +69,18 @@ test(NAME_TEST + 'OnlyCountryTurkey_AMPM', () => {
   let expected = moment.tz(`${country}`).format('HH:mm A'); //24h forma
   expect(result).toBe(expected);
 });
+
+//timeZoneWithFormat
+test(NAME_TEST + 'WithStringFormatQueryRomeEur_H24', () => {
+  let format = 'Europe/Rome';
+  let result = MomentTimeZone.timeZoneWithFormat(format, true);
+  let expected = moment.tz('Europe/Rome').format('HH:mm'); //24h forma
+  expect(result).toBe(expected);
+});
+
+test(NAME_TEST + 'WithStringFormatQueryPhoenixAmerica_H24', () => {
+  let format = 'America/Phoenix';
+  let result = MomentTimeZone.timeZoneWithFormat(format, true);
+  let expected = moment.tz('America/Phoenix').format('HH:mm'); //24h forma
+  expect(result).toBe(expected);
+});

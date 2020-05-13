@@ -19,6 +19,9 @@ import Util from '../Util';
 
 const LOG_TAG = new Date().toISOString() + ' ' + 'CityTime.js';
 
+/**
+ * @deprecated This was implement inside in the first version of app, when the app worked with API and not with moment js
+ */
 class CityTime {
   static fromJsonToClass(jsonValue) {
     if (!jsonValue) {

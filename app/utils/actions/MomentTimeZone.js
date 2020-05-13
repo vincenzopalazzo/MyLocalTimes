@@ -1,3 +1,18 @@
+/**
+ * MyLocalTimes is an mobile app for consulting the local time of the cities.
+ * Copyright (C) 2020 Vincenzo Palazzo vincenzopalazzodev@gmail.com
+
+ * This program is free software; you can redistribute it and/or modify it under the terms
+ * of the GNU General Public License as published by the Free Software Foundation; either
+ * version 2 of the License, or (at your option) any later version.
+
+ * This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY;
+ * without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+ * See the GNU General Public License for more details.
+
+ * You should have received a copy of the GNU General Public License along with this program;
+ * if not, write to the Free Software Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
+ */
 'use strict';
 
 import moment from 'moment-timezone';
@@ -28,6 +43,19 @@ class MomentTimeZone {
       `${LOG_TAG} ${countryName}: ${moment.tz(countryName).format(format)}`,
     );
     return moment.tz(`${countryName}`).format(format);
+  }
+
+  static timeZoneWithFormat(format, h24 = true) {
+    if (!format) {
+      throw new Error(
+        `ERROR inside method timeZoneWithFormat, the format value is ${format}`,
+      );
+    }
+    let timeZoneFormat = this._getFormat(h24);
+    console.debug(
+      `${LOG_TAG} ${format}: ${moment.tz(format).format(timeZoneFormat)}`,
+    );
+    return moment.tz(format).format(timeZoneFormat);
   }
 
   static _getFormat(h24Format) {

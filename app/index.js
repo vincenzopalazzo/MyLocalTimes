@@ -25,21 +25,18 @@ import {
   Snackbar,
   ActivityIndicator,
 } from 'react-native-paper';
-import Moment from 'moment-timezone';
 
 import ScrollViewCardsTime from './components/ScrollViewCardsTime/ScrollViewCardsTime.component';
 import ComponentStyle from './components/ScrollViewCardsTime/ScollViewCardsTime.component.style';
 import DialogNewTimeZone from './components/DialogNewTimeZone/DialogNewTimeZone.component';
 import DAOAndroidStorage from './utils/DAOAndroidStorage';
-import ObtainTimeZoneToAPI from './utils/actions/ObtainTimeZoneToAPI';
-import CityTime from './utils/model/CityTime';
-import Util from './utils/Util';
-import NetInfo from '@react-native-community/netinfo';
 
 import LanguageProvider from './utils/LanguageProvider';
 import Constant from './utils/Constant';
 import MyLocalTimeAppBar from './components/LocalTimeDrawer/LocalTimeDrawer.component';
-import {SafeAreaView, View} from 'react-native';
+import {SafeAreaView} from 'react-native';
+import MomentTimeZone from './utils/actions/MomentTimeZone';
+import TimeZoneCity from './utils/model/TimeZoneCity';
 
 const LOG_TAG = new Date().toISOString() + ' ' + 'index.js';
 
@@ -55,6 +52,7 @@ class MyBetweenTime extends Component {
     this.state = {
       appInitialized: false,
       toastVisible: false,
+      reloadState: false,
       toastMessage: 'TimeZone Updated',
       dialogVisible: false,
       loading: false,
@@ -66,13 +64,10 @@ class MyBetweenTime extends Component {
 
     this.doCloseSnackBar = this.doCloseSnackBar.bind(this);
     this.doAddDataToList = this.doAddDataToList.bind(this);
-    this.doUpdateDataSourceWithAPI = this.doUpdateDataSourceWithAPI.bind(this);
     this.doCloseDialog = this.doCloseDialog.bind(this);
-    this.doRefreshListWithApi = this.doRefreshListWithApi.bind(this);
-    this.doUpdateDataSourceWithoutAPI = this.doUpdateDataSourceWithoutAPI.bind(
-      this,
-    );
     this.doPrintError = this.doPrintError.bind(this);
+    this.updateCityDataSource = this.updateCityDataSource.bind(this);
+    this.refreshCityList = this.refreshCityList.bind(this);
   }
 
   doCloseSnackBar(value, message = 'Refreshed') {
@@ -84,7 +79,7 @@ class MyBetweenTime extends Component {
 
   doPrintError(messageError) {
     if (!messageError) {
-      console.error(LOG_TAG, 'Message error null');
+      console.warn(LOG_TAG, 'Message error null');
       throw new Error('Message error null');
     }
     this.setState({
@@ -100,12 +95,10 @@ class MyBetweenTime extends Component {
     });
   }
 
-  doAddDataToList(cityTime) {
+  async doAddDataToList(cityTime) {
     if (!cityTime) {
-      throw new Error('City time null');
+      throw new Error(`Error inside method doAddDataToList, value city: ${cityTime}`);
     }
-    //let dataSource = this.state.dataSource;
-    //dataSource.push(cityTime);
     console.debug(LOG_TAG, 'Method doAddDataToList with param: ', cityTime);
     let dataSource = this.state.dataSource;
     dataSource.push(cityTime);
@@ -113,183 +106,86 @@ class MyBetweenTime extends Component {
       dataSource: dataSource,
       dialogVisible: false,
     });
-    DAOAndroidStorage.putObjectWithKey(
-      Constant.modelMediator.REPOSITORY,
-      this.state.dataSource,
-    ).catch(error => {
-      this.doPrintError(error.message);
-    });
+    try {
+      await DAOAndroidStorage.putObjectWithKey(
+        Constant.modelMediator.REPOSITORY,
+        this.state.dataSource,
+      );
+    } catch (err) {
+      this.doPrintError(err.message);
+    }
   }
 
-  async doUpdateDataSourceWithAPI(dataSource) {
-    if (!dataSource) {
-      if (dataSource === []) {
-        console.debug(LOG_TAG, 'dataSource empty');
-        let message = 'Local times list empty';
-        this.doCloseSnackBar(false, message);
-        return;
-      }
-      throw new Error('Data source null');
-    }
-    if (!this.state.networkStatus) {
-      this.doCloseSnackBar(false, 'Connection not found');
-    }
-    Object.assign([], ...dataSource);
-    for (let i = 0; i < dataSource.length; i++) {
-      this.setState({
-        loading: true,
-      });
-      let city = CityTime.fromJsonToClass(dataSource[i]);
-      console.debug(LOG_TAG, 'City time inside data source: ', city.toString());
-      console.debug(LOG_TAG, 'URL inside the city: ', city.urlOnline);
-      if (!this.state.networkStatus) {
-        let newDate = new Date(city.time);
-        console.debug(LOG_TAG, 'Time update without API: ', city.time);
-        city.updateTimeWithData(newDate);
-        dataSource[i] = city;
-      } else {
-        await ObtainTimeZoneToAPI.createRequestByURL(city.urlOnline)
-          .then(result => {
-            let newDate = new Date(
-              result.year,
-              result.month,
-              result.day,
-              result.hours,
-              result.minutes,
-              result.seconds,
-              result.millis,
-            );
-            console.debug(
-              LOG_TAG,
-              'Time update with API: ',
-              newDate.toTimeString(),
-            );
-            city.updateTimeWithData(newDate);
-            dataSource[i] = city;
-            console.debug(
-              LOG_TAG,
-              'Time inside city updated: ',
-              city.toString(),
-            );
-          })
-          .catch(error => {
-            this.doPrintError(error.message);
-          });
-      }
-    }
-    console.debug(LOG_TAG, 'Data source value: ', dataSource);
-    let message =
-      this.state.networkStatus === true
-        ? LanguageProvider.getInstance().getTranslate(
-            Constant.language.SNACKBAR_successUpdateDataset,
-          )
-        : 'Connection not enabled';
-    this.setState({
-      dataSource: dataSource,
-      loading: false,
-      toastVisible: true,
-      toastMessage: message,
-    });
-    DAOAndroidStorage.putObjectWithKey(
-      Constant.modelMediator.REPOSITORY,
-      dataSource,
-    ).catch(error => {
-      this.doPrintError(error.message);
-    });
-  }
-
-  doUpdateDataSourceWithoutAPI() {
+  refreshCityList() {
     let dataSource = this.state.dataSource;
-    if (dataSource && dataSource.length !== 0 && this.state.networkStatus) {
-      console.debug(LOG_TAG, 'called method doUpdateDataSourceWithoutAPI()');
-      this.state.dataSource.forEach(city => {
-        let timeCity = city.time;
-        console.debug(LOG_TAG, 'City ', city.name, ' with time: ', timeCity);
-        //add oneMinutes to time
-        let newTime = Moment(timeCity)
-          .add(1, 'minutes')
-          .toDate();
-        console.debug(LOG_TAG, 'New city time: ', Util.doPrintTime(newTime));
-        city.updateTimeWithData(newTime);
-        //check if is the time is correct with the actual time
-      });
-      this.setState({
-        dataSource: this.state.dataSource,
-      });
-    }
+    let dataSourceUpdate = dataSource.map(item => this.updateCityDataSource(item));
+    this.setState({
+      dataSource: dataSourceUpdate,
+    });
   }
 
-  async doRefreshListWithApi(withApi) {
-    if (withApi) {
-      if ((await Util.doCheckDeviceNetwork()) === false) {
-        this.doCloseSnackBar(false, 'Connected not found');
-        return;
-      }
-      await this.doUpdateDataSourceWithAPI(this.state.dataSource);
-    } else {
-      this.doUpdateDataSourceWithoutAPI();
+  updateCityDataSource(localTimeCity) {
+    if (!localTimeCity) {
+      throw new Error(
+        `ERROR inside method: updateCityDataSource: value city from dataSource is ${localTimeCity}`,
+      );
     }
+    console.debug(
+      LOG_TAG,
+      `In method updateCityDataSource with object ${localTimeCity}`,
+    );
+    let cityTimeObject = TimeZoneCity.fromJsonToClass(localTimeCity);
+    console.debug(
+      LOG_TAG,
+      `TimeZoneCity from json is: ${cityTimeObject.nameCity}`,
+    );
+    let queryFormat = cityTimeObject.toString(); //This return CITY/COUNTRY or only COUNTRY
+    let timeZoneUpdate = MomentTimeZone.timeZoneWithFormat(queryFormat);
+    cityTimeObject.setTime(timeZoneUpdate);
+    return cityTimeObject;
   }
 
   async componentDidMount(): void {
-    let unsubscribe = NetInfo.addEventListener(state => {
-      this.setState({
-        networkStatus: state.isConnected,
-      });
-    });
-    this.setState({
-      networkEvent: unsubscribe,
-    });
-    console.log(LOG_TAG, 'Component Did mount');
-    await DAOAndroidStorage.getObjectWithKey(Constant.modelMediator.INIT).then(
-      init => {
-        console.log(LOG_TAG, 'Component did mont value init: ', init);
-        if (init === false) {
-          DAOAndroidStorage.putObjectWithKey(Constant.modelMediator.INIT, true)
-            .then(() => {
-              this.setState({
-                appInitialized: true,
-              });
-            })
-            .catch(error => {
-              this.doPrintError(error.message);
-            });
-
-          DAOAndroidStorage.putObjectWithKey(
-            Constant.modelMediator.REPOSITORY,
-            this.state.dataSource,
-          ).catch(error => {
-            this.doPrintError(error.message);
-          });
-        } else {
-          DAOAndroidStorage.getObjectWithKey(Constant.modelMediator.REPOSITORY)
-            .then(dataSource => {
-              if (dataSource !== undefined) {
-                //UPDATE value wit API
-                this.doUpdateDataSourceWithAPI(dataSource);
-              }
-            })
-            .catch(error => {
-              this.doPrintError(error.message);
-            });
-        }
-      },
+    console.debug(LOG_TAG, 'Component Did mount');
+    let init = await DAOAndroidStorage.getObjectWithKey(
+      Constant.modelMediator.INIT,
     );
-    let interval = setInterval(this.doUpdateDataSourceWithoutAPI, 60000);
+    if (!init) {
+      //Initialize APP
+      await DAOAndroidStorage.putObjectWithKey(
+        Constant.modelMediator.INIT,
+        true,
+      );
+      await DAOAndroidStorage.putObjectWithKey(
+        Constant.modelMediator.REPOSITORY,
+        this.state.dataSource,
+      );
+    } else {
+      //Using dataStored
+      let dataSource = await DAOAndroidStorage.getObjectWithKey(
+        Constant.modelMediator.REPOSITORY,
+      );
+      let dataSourceObj = dataSource.map(item => this.updateCityDataSource(item));
+      console.debug(LOG_TAG, `Data source ${this.state.dataSource}`);
+      this.setState({
+        dataSource: dataSourceObj,
+      });
+    }
+    let interval = setInterval(this.refreshCityList, 60000);
     this.setState({
       intervalEvent: interval,
     });
   }
 
-  componentWillUnmount(): void {
+  async componentWillUnmount(): void {
     let interval = this.state.intervalEvent;
     if (interval) {
       clearInterval(interval);
     }
-    let networkEvent = this.state.networkEvent;
-    if (networkEvent) {
-      networkEvent();
-    }
+    await DAOAndroidStorage.putObjectWithKey(
+      Constant.modelMediator.REPOSITORY,
+      this.state.dataSource,
+    );
   }
 
   render() {
@@ -300,7 +196,7 @@ class MyBetweenTime extends Component {
           <ScrollViewCardsTime
             data={this.state.dataSource}
             onComunicate={this.doCloseSnackBar}
-            onRefresh={this.doRefreshListWithApi}
+            onRefresh={this.refreshCityList}
             onError={this.doPrintError}
             setState={p => {
               this.setState(p);
