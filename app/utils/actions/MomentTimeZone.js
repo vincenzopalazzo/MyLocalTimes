@@ -28,6 +28,10 @@ class MomentTimeZone {
     cityName = Util.doCapitalizeString(cityName);
     countryName = Util.doCapitalizeString(countryName);
     let format = this._getFormat(h24Format);
+    let isValidZone = moment.tz.zone(`${countryName}/${cityName}`);
+    if (!isValidZone) {
+      throw new Error('Invalid Zone');
+    }
     console.debug(
       `${LOG_TAG} ${countryName}/${cityName}: ${moment
         .tz(countryName + '/' + cityName)
@@ -39,6 +43,10 @@ class MomentTimeZone {
   static timeZoneWithCountry(countryName, h24Format = true) {
     countryName = Util.doCapitalizeString(countryName);
     let format = this._getFormat(h24Format);
+    let isValidZone = moment.tz.zone(`${countryName}`);
+    if (!isValidZone) {
+      throw new Error('Invalid Zone');
+    }
     console.debug(
       `${LOG_TAG} ${countryName}: ${moment.tz(countryName).format(format)}`,
     );
@@ -52,6 +60,10 @@ class MomentTimeZone {
       );
     }
     let timeZoneFormat = this._getFormat(h24);
+    let isValidZone = moment.tz.zone(`${format}`);
+    if (!isValidZone) {
+      throw new Error('Invalid Zone');
+    }
     console.debug(
       `${LOG_TAG} ${format}: ${moment.tz(format).format(timeZoneFormat)}`,
     );

@@ -20,12 +20,11 @@ import CityTime from '../model/CityTime';
 import ObtainTimeZoneToAPI from './ObtainTimeZoneToAPI';
 import MomentTimeZone from './MomentTimeZone';
 import TimeZoneCity from '../model/TimeZoneCity';
+import Util from '../Util';
 
 const LOG_TAG = new Date().toISOString() + ' ' + 'CreateNewPersonalTimeZone.js';
 
 class CreateNewPersonalTimeZone {
-  constructor() {}
-
   /** The city name with the API could be null
    * @deprecated This function used the exsternal API, in the official app version this is deprecated.
    */
@@ -81,15 +80,23 @@ class CreateNewPersonalTimeZone {
       onlyCountry = true;
     }
 
+    countryName = Util.doChangeIntoApiName(countryName);
+
     let timezone;
-    if (onlyCountry === true) {
-      timezone = MomentTimeZone.timeZoneWithCountry(countryName);
-    } else {
-      timezone = MomentTimeZone.timeZoneWithCityAnCountry(
-        cityName,
-        countryName,
-      );
+    try {
+      if (onlyCountry === true) {
+        timezone = MomentTimeZone.timeZoneWithCountry(countryName);
+      } else {
+        cityName = Util.doChangeIntoApiName(cityName);
+        timezone = MomentTimeZone.timeZoneWithCityAnCountry(
+          cityName,
+          countryName,
+        );
+      }
+    } catch (e) {
+      throw e;
     }
+
     return new TimeZoneCity({
       city: cityName,
       country: countryName,

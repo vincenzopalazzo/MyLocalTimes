@@ -84,3 +84,13 @@ test(NAME_TEST + 'WithStringFormatQueryPhoenixAmerica_H24', () => {
   let expected = moment.tz('America/Phoenix').format('HH:mm'); //24h forma
   expect(result).toBe(expected);
 });
+
+test(NAME_TEST + 'invalidZoneFormat', () => {
+  let format = 'Phoenix/America';
+  try {
+    MomentTimeZone.timeZoneWithFormat(format, true);
+    expect(1).toBe(0);
+  } catch (e) {
+    expect(1).toBe(1);
+  }
+});

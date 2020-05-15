@@ -24,6 +24,7 @@ import {
   FAB,
   Snackbar,
   ActivityIndicator,
+    withTheme,
 } from 'react-native-paper';
 
 import ScrollViewCardsTime from './components/ScrollViewCardsTime/ScrollViewCardsTime.component';
@@ -253,4 +254,4 @@ class MyBetweenTime extends Component {
   }
 }
 
-export default MyBetweenTime;
+export default withTheme(MyBetweenTime);

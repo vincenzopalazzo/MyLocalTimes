@@ -13,9 +13,10 @@
  * You should have received a copy of the GNU General Public License along with this program;
  * if not, write to the Free Software Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  */
+
 'use strict';
 
-import React, {Component} from 'react';
+import React, {Component, useState} from 'react';
 
 import {View} from 'react-native';
 
@@ -27,6 +28,7 @@ import DialogNewTimeZoneStyle from './DialogNewTimeZone.component.style';
 
 import CreateNewPersonalTimeZone from '../../utils/actions/CreateNewPersonalTimeZone';
 import KeyboardSpacer from 'react-native-keyboard-spacer';
+import MyLocalTimesErrorDialog from '../ErrorDialog/MyLocalTimesErrorDialog';
 
 const LOG_TAG = new Date().toISOString() + ' ' + 'DialogNewTimeZone.js';
 
@@ -39,20 +41,35 @@ class DialogNewTimeZone extends Component {
       nameCountry: undefined,
       unsubscribeNetworkEvent: undefined,
       componentEnabled: true,
+      modalDialog: false,
     };
 
     this.doCreateNewTimeZone = this.doCreateNewTimeZone.bind(this);
+    this.setDialogVisible = this.setDialogVisible.bind(this);
+  }
+
+  setDialogVisible(value) {
+    this.setState({
+      modalDialog: value,
+    });
   }
 
   async doCreateNewTimeZone() {
     try {
+      let newLocalTimeZoneCity;
+      try {
+        newLocalTimeZoneCity = CreateNewPersonalTimeZone.createNewTimeZone(
+          this.state.nameCity,
+          this.state.nameCountry,
+        );
+      } catch (e) {
+        console.warn(LOG_TAG, e.message);
+        this.setDialogVisible(true);
+        return;
+      }
       this.setState({
         componentEnabled: false,
       });
-      let newLocalTimeZoneCity = CreateNewPersonalTimeZone.createNewTimeZone(
-        this.state.nameCity,
-        this.state.nameCountry,
-      );
       this.props.onSubmit(newLocalTimeZoneCity);
       this.setState({
         nameCity: '',
@@ -84,7 +101,7 @@ class DialogNewTimeZone extends Component {
   }
 
   render() {
-    let {dialogVisible: visible, title} = this.props;
+    let {dialogVisible, visible, title} = this.props;
     return (
       <View>
         <BottomModal
@@ -131,6 +148,13 @@ class DialogNewTimeZone extends Component {
             </Chip>
             {Platform.OS === 'ios' && <KeyboardSpacer />}
           </ModalContent>
+          {this.state.modalDialog && (
+            <MyLocalTimesErrorDialog
+              visible={this.state.modalDialog}
+              closeDialog={this.setDialogVisible}
+              message={'TEST'}
+            />
+          )}
         </BottomModal>
       </View>
     );
