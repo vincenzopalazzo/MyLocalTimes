@@ -24,7 +24,7 @@ import {
   FAB,
   Snackbar,
   ActivityIndicator,
-    withTheme,
+  withTheme,
 } from 'react-native-paper';
 
 import ScrollViewCardsTime from './components/ScrollViewCardsTime/ScrollViewCardsTime.component';
@@ -35,7 +35,7 @@ import DAOAndroidStorage from './utils/DAOAndroidStorage';
 import LanguageProvider from './utils/LanguageProvider';
 import Constant from './utils/Constant';
 import MyLocalTimeAppBar from './components/LocalTimeDrawer/LocalTimeDrawer.component';
-import {SafeAreaView} from 'react-native';
+import {SafeAreaView, StatusBar, View} from 'react-native';
 import MomentTimeZone from './utils/actions/MomentTimeZone';
 import TimeZoneCity from './utils/model/TimeZoneCity';
 
@@ -98,7 +98,9 @@ class MyBetweenTime extends Component {
 
   async doAddDataToList(cityTime) {
     if (!cityTime) {
-      throw new Error(`Error inside method doAddDataToList, value city: ${cityTime}`);
+      throw new Error(
+        `Error inside method doAddDataToList, value city: ${cityTime}`,
+      );
     }
     console.debug(LOG_TAG, 'Method doAddDataToList with param: ', cityTime);
     let dataSource = this.state.dataSource;
@@ -119,7 +121,9 @@ class MyBetweenTime extends Component {
 
   refreshCityList() {
     let dataSource = this.state.dataSource;
-    let dataSourceUpdate = dataSource.map(item => this.updateCityDataSource(item));
+    let dataSourceUpdate = dataSource.map(item =>
+      this.updateCityDataSource(item),
+    );
     this.setState({
       dataSource: dataSourceUpdate,
     });
@@ -166,7 +170,9 @@ class MyBetweenTime extends Component {
       let dataSource = await DAOAndroidStorage.getObjectWithKey(
         Constant.modelMediator.REPOSITORY,
       );
-      let dataSourceObj = dataSource.map(item => this.updateCityDataSource(item));
+      let dataSourceObj = dataSource.map(item =>
+        this.updateCityDataSource(item),
+      );
       console.debug(LOG_TAG, `Data source ${this.state.dataSource}`);
       this.setState({
         dataSource: dataSourceObj,
@@ -192,6 +198,11 @@ class MyBetweenTime extends Component {
   render() {
     return (
       <PaperProvider theme={LITE_THEME}>
+        <StatusBar
+          backgroundColor={LITE_THEME.colors.primary}
+          barStyle="light-content"
+        />
+        <SafeAreaView style={GlobalStyle.droidSafeAreaTop} />
         <SafeAreaView style={GlobalStyle.droidSafeAreaDown}>
           <MyLocalTimeAppBar />
           <ScrollViewCardsTime

@@ -16,9 +16,9 @@
 
 'use strict';
 
-import React, {Component, useState} from 'react';
+import React, {Component} from 'react';
 
-import {View} from 'react-native';
+import {View, Platform} from 'react-native';
 
 import {BottomModal, ModalContent, ModalTitle} from 'react-native-modals';
 import {Button, Chip, withTheme, TextInput} from 'react-native-paper';
@@ -28,7 +28,7 @@ import DialogNewTimeZoneStyle from './DialogNewTimeZone.component.style';
 
 import CreateNewPersonalTimeZone from '../../utils/actions/CreateNewPersonalTimeZone';
 import KeyboardSpacer from 'react-native-keyboard-spacer';
-import MyLocalTimesErrorDialog from '../ErrorDialog/MyLocalTimesErrorDialog';
+import MyLocalTimesErrorDialog from '../ErrorDialog/MyLocalTimesErrorDialog.component';
 
 const LOG_TAG = new Date().toISOString() + ' ' + 'DialogNewTimeZone.js';
 
@@ -101,7 +101,7 @@ class DialogNewTimeZone extends Component {
   }
 
   render() {
-    let {dialogVisible, visible, title} = this.props;
+    let {visible, title} = this.props;
     return (
       <View>
         <BottomModal

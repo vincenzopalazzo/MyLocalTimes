@@ -79,7 +79,7 @@ class CardTime extends Component {
             },
             {
               label: `${addAlarmTextButton}`,
-              icon: 'alarm_add',
+              icon: 'map-clock',
               onPress: () => this.setState({bannerVisible: false}),
             },
             {

@@ -182,7 +182,9 @@ PODS:
     - React-cxxreact (= 0.61.5)
     - React-jsi (= 0.61.5)
   - React-jsinspector (0.61.5)
-  - react-native-netinfo (5.5.0):
+  - react-native-netinfo (5.8.0):
+    - React
+  - react-native-safe-area-context (1.0.0):
     - React
   - React-RCTActionSheet (0.61.5):
     - React-Core/RCTActionSheetHeaders (= 0.61.5)
@@ -219,9 +221,17 @@ PODS:
     - React-cxxreact (= 0.61.5)
     - React-jsi (= 0.61.5)
     - ReactCommon/jscallinvoker (= 0.61.5)
-  - RNCAsyncStorage (1.7.1):
+  - RNCAsyncStorage (1.10.0):
     - React
-  - RNDeviceInfo (5.5.1):
+  - RNDeviceInfo (5.5.7):
+    - React
+  - RNGestureHandler (1.6.1):
+    - React
+  - RNLocalize (1.4.0):
+    - React
+  - RNReanimated (1.8.0):
+    - React
+  - RNScreens (2.7.0):
     - React
   - RNVectorIcons (6.6.0):
     - React
@@ -245,6 +255,7 @@ DEPENDENCIES:
   - React-jsiexecutor (from `../node_modules/react-native/ReactCommon/jsiexecutor`)
   - React-jsinspector (from `../node_modules/react-native/ReactCommon/jsinspector`)
   - "react-native-netinfo (from `../node_modules/@react-native-community/netinfo`)"
+  - react-native-safe-area-context (from `../node_modules/react-native-safe-area-context`)
   - React-RCTActionSheet (from `../node_modules/react-native/Libraries/ActionSheetIOS`)
   - React-RCTAnimation (from `../node_modules/react-native/Libraries/NativeAnimation`)
   - React-RCTBlob (from `../node_modules/react-native/Libraries/Blob`)
@@ -258,6 +269,10 @@ DEPENDENCIES:
   - ReactCommon/turbomodule/core (from `../node_modules/react-native/ReactCommon`)
   - "RNCAsyncStorage (from `../node_modules/@react-native-community/async-storage`)"
   - RNDeviceInfo (from `../node_modules/react-native-device-info`)
+  - RNGestureHandler (from `../node_modules/react-native-gesture-handler`)
+  - RNLocalize (from `../node_modules/react-native-localize`)
+  - RNReanimated (from `../node_modules/react-native-reanimated`)
+  - RNScreens (from `../node_modules/react-native-screens`)
   - RNVectorIcons (from `../node_modules/react-native-vector-icons`)
   - Yoga (from `../node_modules/react-native/ReactCommon/yoga`)
 
@@ -296,6 +311,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native/ReactCommon/jsinspector"
   react-native-netinfo:
     :path: "../node_modules/@react-native-community/netinfo"
+  react-native-safe-area-context:
+    :path: "../node_modules/react-native-safe-area-context"
   React-RCTActionSheet:
     :path: "../node_modules/react-native/Libraries/ActionSheetIOS"
   React-RCTAnimation:
@@ -320,6 +337,14 @@ EXTERNAL SOURCES:
     :path: "../node_modules/@react-native-community/async-storage"
   RNDeviceInfo:
     :path: "../node_modules/react-native-device-info"
+  RNGestureHandler:
+    :path: "../node_modules/react-native-gesture-handler"
+  RNLocalize:
+    :path: "../node_modules/react-native-localize"
+  RNReanimated:
+    :path: "../node_modules/react-native-reanimated"
+  RNScreens:
+    :path: "../node_modules/react-native-screens"
   RNVectorIcons:
     :path: "../node_modules/react-native-vector-icons"
   Yoga:
@@ -341,7 +366,8 @@ SPEC CHECKSUMS:
   React-jsi: cb2cd74d7ccf4cffb071a46833613edc79cdf8f7
   React-jsiexecutor: d5525f9ed5f782fdbacb64b9b01a43a9323d2386
   React-jsinspector: fa0ecc501688c3c4c34f28834a76302233e29dc0
-  react-native-netinfo: 4f7469b001be001975d1566fb757fb04e3905bec
+  react-native-netinfo: 6458a467af4b3b7b0b87a179776ba6ba469e4f22
+  react-native-safe-area-context: 5f3e081f937ab7c44c179d551f332fa494cfcf8f
   React-RCTActionSheet: 600b4d10e3aea0913b5a92256d2719c0cdd26d76
   React-RCTAnimation: 791a87558389c80908ed06cc5dfc5e7920dfa360
   React-RCTBlob: d89293cc0236d9cb0933d85e430b0bbe81ad1d72
@@ -352,8 +378,12 @@ SPEC CHECKSUMS:
   React-RCTText: 9ccc88273e9a3aacff5094d2175a605efa854dbe
   React-RCTVibration: a49a1f42bf8f5acf1c3e297097517c6b3af377ad
   ReactCommon: 198c7c8d3591f975e5431bec1b0b3b581aa1c5dd
-  RNCAsyncStorage: 8539fc80a0075fcc9c8e2dff84cd22dc5bf1dacf
-  RNDeviceInfo: 6812ed7e578d4344bf4e77102f014b5adf0b5c28
+  RNCAsyncStorage: b34d2399d3e25db01d5b881949b503bd3c224d57
+  RNDeviceInfo: 498ccbf8b1361fe858581e3c1193ecee1a031e62
+  RNGestureHandler: 8f09cd560f8d533eb36da5a6c5a843af9f056b38
+  RNLocalize: fc27ee5878ce5a3af73873fb2d8e866e0d1e6d84
+  RNReanimated: 955cf4068714003d2f1a6e2bae3fb1118f359aff
+  RNScreens: cf198f915f8a2bf163de94ca9f5bfc8d326c3706
   RNVectorIcons: 0bb4def82230be1333ddaeee9fcba45f0b288ed4
   Yoga: f2a7cd4280bfe2cca5a7aed98ba0eb3d1310f18b
 

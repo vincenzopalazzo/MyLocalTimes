@@ -53,12 +53,6 @@ const LOG_TAG = new Date().toISOString() + ' ' + 'LocalTimeDrawer.component.js';
 class MyLocalTimeAppBar extends Component {
   render() {
     return (
-      <View>
-        <StatusBar
-          backgroundColor={LITE_THEME.colors.primary}
-          barStyle="light-content"
-        />
-        <SafeAreaView style={GlobalStyle.droidSafeAreaTop} />
         <Appbar.Header style={GlobalStyle.appBar}>
           <Appbar.Action
             icon="menu"
@@ -71,7 +65,6 @@ class MyLocalTimeAppBar extends Component {
           />
           <Avatar.Image size={35} source={require('../../assets/avatar.png')} />
         </Appbar.Header>
-      </View>
     );
   }
 }
