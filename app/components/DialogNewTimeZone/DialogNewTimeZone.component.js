@@ -29,6 +29,8 @@ import DialogNewTimeZoneStyle from './DialogNewTimeZone.component.style';
 import CreateNewPersonalTimeZone from '../../utils/actions/CreateNewPersonalTimeZone';
 import KeyboardSpacer from 'react-native-keyboard-spacer';
 import MyLocalTimesErrorDialog from '../ErrorDialog/MyLocalTimesErrorDialog.component';
+import LanguageProvider from '../../utils/LanguageProvider';
+import Constant from '../../utils/Constant';
 
 const LOG_TAG = new Date().toISOString() + ' ' + 'DialogNewTimeZone.js';
 
@@ -115,7 +117,9 @@ class DialogNewTimeZone extends Component {
           <ModalContent>
             <TextInput
               style={DialogNewTimeZoneStyle.textInput}
-              placeholder={'EX: Rome, Phoenix'}
+              placeholder={LanguageProvider.getInstance().getTranslate(
+                Constant.language.PLACEHOLDER_INSERT_CITY_EXAMPLE,
+              )}
               label={'City name'}
               disabled={!this.state.componentEnabled}
               theme={this.props.theme}
@@ -137,14 +141,19 @@ class DialogNewTimeZone extends Component {
                 theme={this.props.theme}
                 disabled={!this.state.componentEnabled}
                 onPress={() => this.doCreateNewTimeZone()}>
-                Search
+                {LanguageProvider.getInstance().getTranslate(
+                  Constant.language.NEW_TIME_ZONE_SEARCH_TEXT,
+                )}
               </Button>
             </View>
             <Chip
               style={DialogNewTimeZoneStyle.chipInfo}
               icon="information"
+              disabled={true}
               onPress={() => console.log('Pressed')}>
-              Info
+              {LanguageProvider.getInstance().getTranslate(
+                Constant.language.NEW_TIME_ZONE_INFO_TEXT,
+              )}
             </Chip>
             {Platform.OS === 'ios' && <KeyboardSpacer />}
           </ModalContent>
@@ -152,7 +161,9 @@ class DialogNewTimeZone extends Component {
             <MyLocalTimesErrorDialog
               visible={this.state.modalDialog}
               closeDialog={this.setDialogVisible}
-              message={'TEST'}
+              message={LanguageProvider.getInstance().getTranslate(
+                Constant.language.ERROR_DIALOG_MESSAGE,
+              )}
             />
           )}
         </BottomModal>

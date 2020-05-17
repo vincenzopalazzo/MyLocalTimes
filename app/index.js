@@ -71,7 +71,12 @@ class MyBetweenTime extends Component {
     this.refreshCityList = this.refreshCityList.bind(this);
   }
 
-  doCloseSnackBar(value, message = 'Refreshed') {
+  doCloseSnackBar(
+    value,
+    message = LanguageProvider.getInstance().getTranslate(
+      Constant.language.MESSAGE_REFRESH_LIST,
+    ),
+  ) {
     this.setState({
       toastVisible: !value,
       toastMessage: message,
@@ -104,6 +109,18 @@ class MyBetweenTime extends Component {
     }
     console.debug(LOG_TAG, 'Method doAddDataToList with param: ', cityTime);
     let dataSource = this.state.dataSource;
+    if (dataSource.some(city => city.toString() === cityTime.toString())) {
+      this.setState({
+        dialogVisible: false,
+      });
+      this.doCloseSnackBar(
+        false,
+        LanguageProvider.getInstance().getTranslate(
+          Constant.language.CITY_EXIST_ALREADY,
+        ),
+      );
+      return;
+    }
     dataSource.push(cityTime);
     this.setState({
       dataSource: dataSource,
@@ -173,7 +190,7 @@ class MyBetweenTime extends Component {
       let dataSourceObj = dataSource.map(item =>
         this.updateCityDataSource(item),
       );
-      console.debug(LOG_TAG, `Data source ${this.state.dataSource}`);
+      console.debug(LOG_TAG, `Data source ${dataSourceObj}`);
       this.setState({
         dataSource: dataSourceObj,
       });

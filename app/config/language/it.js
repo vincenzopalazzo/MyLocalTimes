@@ -10,4 +10,11 @@ export default {
   CARD_VIEW_BANNER_DELETE: 'Cancella',
   CARD_VIEW_BANNER_CLOSE: 'Chiudi',
   CARD_VIEW_BANNER_ADD_ALARM: 'Sveglia',
+  ERROR_DIALOG_MESSAGE: 'Le informazioni inserite sono sbagliate, non ho nessuna informazione riguardo l\'orario desideratio',
+  NEW_TIME_ZONE_SEARCH_TEXT: 'Cerca',
+  NEW_TIME_ZONE_INFO_TEXT: 'Informazioni',
+  PLACEHOLDER_INSERT_CITY_EXAMPLE: 'Es: Phoenix/Rome (The name in English lan.)',
+  PLACEHOLDER_INSERT_COUNTRY_EXAMPLE: 'Es: America/Italy (The name in English lan.)',
+  CITY_EXIST_ALREADY: 'Orario locale gia\' presente',
+  MESSAGE_REFRESH_LIST: 'Dati aggiornati',
 };

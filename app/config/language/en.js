@@ -10,4 +10,11 @@ export default {
   CARD_VIEW_BANNER_DELETE: 'Delete',
   CARD_VIEW_BANNER_CLOSE: 'Close',
   CARD_VIEW_BANNER_ADD_ALARM: 'Add alarm',
+  ERROR_DIALOG_MESSAGE: 'The location insert is wrong, I don\' have any information about this timezone',
+  NEW_TIME_ZONE_SEARCH_TEXT: 'Search',
+  NEW_TIME_ZONE_INFO_TEXT: 'Info',
+  PLACEHOLDER_INSERT_CITY_EXAMPLE: 'Ex: Phoenix/Rome',
+  PLACEHOLDER_INSERT_COUNTRY_EXAMPLE: 'Ex: America/Italy',
+  CITY_EXIST_ALREADY: 'Timezone already present',
+  MESSAGE_REFRESH_LIST: 'Data refreshed',
 };
