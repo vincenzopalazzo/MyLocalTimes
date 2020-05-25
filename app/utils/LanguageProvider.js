@@ -13,15 +13,19 @@
  * You should have received a copy of the GNU General Public License along with this program;
  * if not, write to the Free Software Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  */
+
 'use strict';
 
 import * as RNLocalize from 'react-native-localize';
 import I18n from 'i18n-js';
-import {I18nManager} from 'react-native';
+import {I18nManager, NativeModules, Platform} from 'react-native';
 import memoize from 'lodash.memoize';
 
 import en from '../config/language/en';
 import it from '../config/language/it';
+import Constant from './Constant';
+
+const LOG_TAG = new Date().toISOString() + ' ' + 'LanguageProvider.js';
 
 let _SINGLETON;
 
@@ -38,15 +42,18 @@ class LanguageProvider {
       (key, config) => I18n.t(key, config),
       (key, config) => (config ? key + JSON.stringify(config) : key),
     );
-    this._initSupportedLanguage();
-    this._configureBundle();
-  }
-
-  _initSupportedLanguage() {
     this.translationGetters = {
       en,
       it,
     };
+    this.languageSupported = [
+      Constant.language.ITALIAN_SUPPORT,
+      Constant.language.ENGLISH_US_SUPPORT,
+      Constant.language.AUTO_LANGUAGE,
+    ];
+
+    this.autoupdateLanguage = true;
+    this._configureBundle();
   }
 
   _configureBundle() {
@@ -64,11 +71,56 @@ class LanguageProvider {
     I18nManager.forceRTL(isRTL);
 
     // set i18n-js config
-    I18n.translations = {[languageTag]: this.translationGetters[languageTag]};
+    I18n.translations = {
+      [languageTag]: this.translationGetters[languageTag],
+    };
     I18n.locale = languageTag;
   }
 
+  _isChangeLanguage() {
+    if (!this.autoupdateLanguage) {
+      return false;
+    }
+    let actualLanguage = RNLocalize.getLocales()[0].languageCode;
+    console.debug(LOG_TAG, `Actual language: ${actualLanguage}`);
+    console.debug(LOG_TAG, `Bundle language: ${I18n.locale}`);
+    return actualLanguage !== I18n.locale;
+  }
+
+  async changeLanguage(newLanguage, auto) {
+    this.autoupdateLanguage = auto;
+    const fallback = {languageTag: newLanguage};
+    const {languageTag} = RNLocalize.findBestAvailableLanguage(fallback);
+
+    this.bundle.cache.clear();
+
+    I18n.translations = {
+      [languageTag]: this.translationGetters[languageTag](),
+    };
+    I18n.locale = languageTag;
+  }
+
+  getCurrentLanguage() {
+    if (this.autoupdateLanguage) {
+      return this.getTranslate(Constant.language.AUTO_LANGUAGE);
+    }
+    let actualLanguage = RNLocalize.getLocales()[0].languageCode;
+    if (actualLanguage === 'it') {
+      return this.getTranslate(Constant.language.ITALIAN_SUPPORT);
+    } else if (actualLanguage === 'en') {
+      return this.getTranslate(Constant.language.ENGLISH_US_SUPPORT);
+    }
+  }
+
+  getLanguageSupport() {
+    return this.languageSupported.map(item => this.getTranslate(item));
+  }
+
   getTranslate(key) {
+    if (this._isChangeLanguage()) {
+      console.debug(LOG_TAG, 'Language changed');
+      this._configureBundle();
+    }
     return this.bundle(key);
   }
 }

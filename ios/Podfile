@@ -40,6 +40,8 @@ target 'mybetweentime' do
 
   pod 'RNDeviceInfo', :path => '../node_modules/react-native-device-info'
 
+  pod 'RNLocalize', :path => '../node_modules/react-native-localize'
+
   target 'mybetweentimeTests' do
     inherit! :search_paths
     # Pods for testing

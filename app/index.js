@@ -34,8 +34,8 @@ import DAOAndroidStorage from './utils/DAOAndroidStorage';
 
 import LanguageProvider from './utils/LanguageProvider';
 import Constant from './utils/Constant';
-import MyLocalTimeAppBar from './components/LocalTimeDrawer/LocalTimeDrawer.component';
-import {SafeAreaView, StatusBar, View} from 'react-native';
+import MyLocalTimeAppBar from './components/LocalTimeDrawer/LocalTimeAppBar.component';
+import {SafeAreaView, StatusBar} from 'react-native';
 import MomentTimeZone from './utils/actions/MomentTimeZone';
 import TimeZoneCity from './utils/model/TimeZoneCity';
 
@@ -216,12 +216,18 @@ class MyBetweenTime extends Component {
     return (
       <PaperProvider theme={LITE_THEME}>
         <StatusBar
-          backgroundColor={LITE_THEME.colors.primary}
+          backgroundColor={LITE_THEME.colors.accent}
           barStyle="light-content"
         />
         <SafeAreaView style={GlobalStyle.droidSafeAreaTop} />
         <SafeAreaView style={GlobalStyle.droidSafeAreaDown}>
-          <MyLocalTimeAppBar />
+          <MyLocalTimeAppBar
+            title={LanguageProvider.getInstance().getTranslate(
+              Constant.language.HOME_titleAppBar,
+            )}
+            nameIcon="menu"
+            action={this.props.navigation.openDrawer}
+          />
           <ScrollViewCardsTime
             data={this.state.dataSource}
             onComunicate={this.doCloseSnackBar}

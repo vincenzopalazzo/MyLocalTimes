@@ -2,7 +2,7 @@ import React from 'react';
 
 import {Modal} from 'react-native';
 
-import {Dialog, Button, Paragraph, withTheme, Colors} from 'react-native-paper';
+import {Dialog, Button, Paragraph, withTheme} from 'react-native-paper';
 
 import LanguageProvider from '../../utils/LanguageProvider';
 import Constant from '../../utils/Constant';
@@ -15,7 +15,7 @@ class MyLocalTimesErrorDialog extends React.Component {
   render() {
     let {message, visible, closeDialog} = this.props;
     return (
-      <Modal>
+      <Modal transparent={true}>
         <Dialog theme={this.props.theme} visible={visible} onDismiss={closeDialog}>
           <Dialog.Content theme={this.props.theme}>
             <Paragraph>{message}</Paragraph>
