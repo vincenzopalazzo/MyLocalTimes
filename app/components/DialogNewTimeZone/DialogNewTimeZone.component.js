@@ -36,9 +36,9 @@ class DialogNewTimeZone extends Component {
     this.state = {
       nameCity: undefined,
       nameCountry: undefined,
-      unsubscribeNetworkEvent: undefined,
       componentEnabled: true,
-      modalDialog: false,
+      visibleErrDialog: false,
+      closeDialogAction: undefined,
     };
 
     this.doCreateNewTimeZone = this.doCreateNewTimeZone.bind(this);
@@ -47,7 +47,7 @@ class DialogNewTimeZone extends Component {
 
   setDialogVisible(value) {
     this.setState({
-      modalDialog: value,
+      visibleErrDialog: value,
     });
   }
 
@@ -60,7 +60,7 @@ class DialogNewTimeZone extends Component {
           this.state.nameCountry,
         );
       } catch (e) {
-        console.warn(LOG_TAG, e.message);
+        console.debug(LOG_TAG, e.message);
         this.setDialogVisible(true);
         return;
       }
@@ -86,7 +86,7 @@ class DialogNewTimeZone extends Component {
         <BottomModal
           width={0.9}
           rounded
-          visible={visible}
+          visible={visible && !this.state.visibleErrDialog}
           onClose={this.props.onClose}
           onTouchOutside={() => this.props.setState({dialogVisible: false})}
           onSwipeOut={() => this.props.setState({dialogVisible: false})}
@@ -123,27 +123,18 @@ class DialogNewTimeZone extends Component {
                 )}
               </Button>
             </View>
-            <Chip
-              style={DialogNewTimeZoneStyle.chipInfo}
-              icon="information"
-              disabled={true}
-              onPress={() => console.log('Pressed')}>
-              {LanguageProvider.getInstance().getTranslate(
-                Constant.language.NEW_TIME_ZONE_INFO_TEXT,
-              )}
-            </Chip>
             {Platform.OS === 'ios' && <KeyboardSpacer />}
           </ModalContent>
-          {this.state.modalDialog && (
-            <MyLocalTimesErrorDialog
-              visible={this.state.modalDialog}
-              closeDialog={this.setDialogVisible}
-              message={LanguageProvider.getInstance().getTranslate(
-                Constant.language.ERROR_DIALOG_MESSAGE,
-              )}
-            />
-          )}
         </BottomModal>
+        {this.state.visibleErrDialog && (
+          <MyLocalTimesErrorDialog
+            visible={this.state.visibleErrDialog}
+            closeDialog={this.setDialogVisible}
+            message={LanguageProvider.getInstance().getTranslate(
+              Constant.language.ERROR_DIALOG_MESSAGE,
+            )}
+          />
+        )}
       </View>
     );
   }
