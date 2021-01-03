@@ -19,6 +19,7 @@ export default {
   modelMediator: {
     REPOSITORY: 'REPOSITORY',
     INIT: 'INIT',
+    APP_STATUS: 'APP_STATUS',
   },
   language: {
     HOME_titleAppBar: 'HOME_titleAppBar',
@@ -51,6 +52,8 @@ export default {
     ITALIAN_SUPPORT: 'ITALIAN_SUPPORT',
     ENGLISH_US_SUPPORT: 'ENGLISH_US_SUPPORT',
     AUTO_LANGUAGE: 'AUTO_LANGUAGE',
+    CANCEL_BUTTON_DIALOG_LANGUAGE: 'CANCEL_BUTTON_DIALOG_LANGUAGE',
+    OK_BUTTON_DIALOG_LANGUAGE: 'OK_BUTTON_DIALOG_LANGUAGE',
   },
   navigation: {
     HOME: 'HOME',

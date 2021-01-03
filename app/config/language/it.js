@@ -31,5 +31,7 @@ export default {
   SHARE_MESSAGE: "Scarica l'app: TODO",
   ITALIAN_SUPPORT: 'Italiano (Italia)',
   ENGLISH_US_SUPPORT: 'Inglese (USA)',
-  AUTO_LANGUAGE: 'Automatica'
+  AUTO_LANGUAGE: 'Automatica',
+  CANCEL_BUTTON_DIALOG_LANGUAGE: 'Annulla',
+  OK_BUTTON_DIALOG_LANGUAGE: 'Applica',
 };

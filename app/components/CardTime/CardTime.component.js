@@ -13,15 +13,11 @@
  * You should have received a copy of the GNU General Public License along with this program;
  * if not, write to the Free Software Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  */
-
 'use strict';
 
 import React, {Component} from 'react';
-
 import {Text, View} from 'react-native';
-
 import {IconButton, Banner, Card, withTheme} from 'react-native-paper';
-
 import CardTimeStyle from './CardTime.component.style';
 import LanguageProvider from '../../utils/LanguageProvider';
 import Constant from '../../utils/Constant';

@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 
 import {Avatar, Drawer, withTheme} from 'react-native-paper';
-import {View, Share} from 'react-native';
+import {View} from 'react-native';
 import styles from './MyLocalTimeDrawer.style';
 import Theme from '../../Theme.style';
 import {DrawerContentScrollView} from '@react-navigation/drawer';

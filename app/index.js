@@ -13,12 +13,10 @@
  * You should have received a copy of the GNU General Public License along with this program;
  * if not, write to the Free Software Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  */
-
 import GlobalStyle from './index.style';
 import ThemeManager from './Theme.style';
 
 import React, {Component} from 'react';
-
 import {
   Provider as PaperProvider,
   FAB,
@@ -26,12 +24,10 @@ import {
   ActivityIndicator,
   withTheme,
 } from 'react-native-paper';
-
 import ScrollViewCardsTime from './components/ScrollViewCardsTime/ScrollViewCardsTime.component';
 import ComponentStyle from './components/ScrollViewCardsTime/ScollViewCardsTime.component.style';
 import DialogNewTimeZone from './components/DialogNewTimeZone/DialogNewTimeZone.component';
 import DAOAndroidStorage from './utils/DAOAndroidStorage';
-
 import LanguageProvider from './utils/LanguageProvider';
 import Constant from './utils/Constant';
 import MyLocalTimeAppBar from './components/LocalTimeDrawer/LocalTimeAppBar.component';
@@ -40,7 +36,6 @@ import MomentTimeZone from './utils/actions/MomentTimeZone';
 import TimeZoneCity from './utils/model/TimeZoneCity';
 
 const LOG_TAG = new Date().toISOString() + ' ' + 'index.js';
-
 const LITE_THEME = ThemeManager.lite;
 
 /**

@@ -1,6 +1,22 @@
-import React, {Component} from 'react';
-import {Modal, ScrollView} from 'react-native';
+/**
+ * MyLocalTimes is an mobile app for consulting the local time of the cities.
+ * Copyright (C) 2020 Vincenzo Palazzo vincenzopalazzodev@gmail.com
 
+ * This program is free software; you can redistribute it and/or modify it under the terms
+ * of the GNU General Public License as published by the Free Software Foundation; either
+ * version 2 of the License, or (at your option) any later version.
+
+ * This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY;
+ * without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+ * See the GNU General Public License for more details.
+
+ * You should have received a copy of the GNU General Public License along with this program;
+ * if not, write to the Free Software Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
+ */
+'use strict';
+
+import React, {Component} from 'react';
+import {ScrollView} from 'react-native';
 import {List, withTheme, Switch, Divider} from 'react-native-paper';
 import MyLocalTimeAppBar from '../LocalTimeDrawer/LocalTimeAppBar.component';
 import LanguageProvider from '../../utils/LanguageProvider';
@@ -9,17 +25,47 @@ import Theme from '../../Theme.style';
 import ShareAppAction from '../../utils/actions/ShareAppAction';
 import RateAppAction from '../../utils/actions/RateAppAction';
 import DialogChooseLanguageComponent from './DialogChooseLanguage.component';
+import DAOAndroidStorage from '../../utils/DAOAndroidStorage';
+
+const LOG_TAG = `${new Date().toISOString()} MyLocalTimesSetting.component.js`;
 
 class MyLocalTimesSetting extends Component {
   constructor(props) {
     super(props);
     this.state = {
       lanDialogVisible: false,
+      typeHoursFormat: true, // true is for 24h and false is for 12h,
+      darkTheme: false,
     };
 
     this.onShare = this.onShare.bind(this);
     this.onRate = this.onRate.bind(this);
     this.closeLanguageDialog = this.closeLanguageDialog.bind(this);
+  }
+
+  componentDidMount() {
+    let typeHoursFormat = DAOAndroidStorage.getObjectWithKeyDefVal(
+      'typeHoursFormat',
+      true,
+    );
+    let darkTheme = DAOAndroidStorage.getObjectWithKeyDefVal(
+      'darkTheme',
+      false,
+    );
+    this.setState({
+      typeHoursFormat: typeHoursFormat,
+      darkTheme: darkTheme,
+    });
+    console.debug(LOG_TAG, 'componentDidMount Called');
+  }
+
+  componentWillUnmount() {
+    DAOAndroidStorage.putObjectWithKey(
+      'typeHoursFormat',
+      this.state.typeHoursFormat,
+    );
+    DAOAndroidStorage.putObjectWithKey('darkTheme', this.state.darkTheme);
+    console.debug(LOG_TAG, 'componentWillUnmount Called');
   }
 
   async onShare() {
@@ -65,8 +111,12 @@ class MyLocalTimesSetting extends Component {
             right={() => (
               <Switch
                 theme={theme}
-                value={true}
-                onValueChange={() => console.log('swich')}
+                value={this.state.typeHoursFormat}
+                onValueChange={() =>
+                  this.setState({
+                    typeHoursFormat: !this.state.typeHoursFormat,
+                  })
+                }
               />
             )}
           />
@@ -97,8 +147,10 @@ class MyLocalTimesSetting extends Component {
             right={() => (
               <Switch
                 theme={theme}
-                value={false}
-                onValueChange={() => console.log('swich')}
+                value={this.state.darkTheme}
+                onValueChange={() =>
+                  this.setState({darkTheme: !this.state.darkTheme})
+                }
               />
             )}
           />

@@ -45,6 +45,14 @@ class DAOAndroidStorage {
     }
   }
 
+  static async getObjectWithKeyDefVal(key, defVal) {
+    let val = DAOAndroidStorage.getObjectWithKey(key);
+    if (val === undefined) {
+      return defVal;
+    }
+    return val;
+  }
+
   static async mergeObjectWithKey(key) {
     if (!key) {
       throw new Error('Key is null');

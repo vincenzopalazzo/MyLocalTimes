@@ -29,4 +29,6 @@ export default {
   ITALIAN_SUPPORT: 'Italian (Italy)',
   ENGLISH_US_SUPPORT: 'English (USA)',
   AUTO_LANGUAGE: 'Automatic',
+  CANCEL_BUTTON_DIALOG_LANGUAGE: 'Cancel',
+  OK_BUTTON_DIALOG_LANGUAGE: 'Apply',
 };

@@ -13,29 +13,6 @@
  * You should have received a copy of the GNU General Public License along with this program;
  * if not, write to the Free Software Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  */
-/*
-<StatusBar
-          backgroundColor={LITE_THEME.colors.primary}
-          barStyle="light-content"
-        />
-        <SafeAreaView style={GlobalStyle.droidSafeAreaTop} />
-        <SafeAreaView style={GlobalStyle.droidSafeAreaDown}>
-          <Appbar.Header style={GlobalStyle.appBar}>
-            <Appbar.Action
-              icon="menu"
-              onPress={console.log(LOG_TAG, 'Open drawer')}
-            />
-            <Appbar.Content
-              title={LanguageProvider.getInstance().getTranslate(
-                Constant.language.HOME_titleAppBar,
-              )}
-            />
-            <Avatar.Image size={35} source={require('./assets/avatar.png')} />
-          </Appbar.Header>
-          </SafeAreaView>
-
- */
-
 'use strict';
 
 import React, {Component} from 'react';

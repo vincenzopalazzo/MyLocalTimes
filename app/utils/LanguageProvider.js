@@ -13,12 +13,12 @@
  * You should have received a copy of the GNU General Public License along with this program;
  * if not, write to the Free Software Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  */
-
 'use strict';
 
 import * as RNLocalize from 'react-native-localize';
+import RNRestart from 'react-native-restart';
 import I18n from 'i18n-js';
-import {I18nManager, NativeModules, Platform} from 'react-native';
+import {I18nManager} from 'react-native';
 import memoize from 'lodash.memoize';
 
 import en from '../config/language/en';
@@ -58,23 +58,39 @@ class LanguageProvider {
 
   _configureBundle() {
     // fallback if no available language fits
-    const fallback = {languageTag: 'en', isRTL: false};
+    if (this.autoupdateLanguage === true) {
+      const fallback = {languageTag: 'en', isRTL: false};
 
-    const {languageTag, isRTL} =
-      RNLocalize.findBestAvailableLanguage(
-        Object.keys(this.translationGetters),
-      ) || fallback;
+      const {languageTag, isRTL} =
+        RNLocalize.findBestAvailableLanguage(
+          Object.keys(this.translationGetters),
+        ) || fallback;
 
-    // clear translation cache
-    this.bundle.cache.clear();
-    // update layout direction
-    I18nManager.forceRTL(isRTL);
+      // clear translation cache
+      this.bundle.cache.clear();
+      // update layout direction
+      I18nManager.forceRTL(isRTL);
 
-    // set i18n-js config
-    I18n.translations = {
-      [languageTag]: this.translationGetters[languageTag],
-    };
-    I18n.locale = languageTag;
+      // set i18n-js config
+      I18n.translations = {
+        [languageTag]: this.translationGetters[languageTag],
+      };
+      I18n.locale = languageTag;
+    } else {
+      let actual = I18n.locale;
+      const {languageTag, isRTL} = RNLocalize.findBestAvailableLanguage(actual);
+
+      // clear translation cache
+      this.bundle.cache.clear();
+      // update layout direction
+      I18nManager.forceRTL(isRTL);
+
+      // set i18n-js config
+      I18n.translations = {
+        [languageTag]: this.translationGetters[languageTag],
+      };
+      I18n.locale = languageTag;
+    }
   }
 
   _isChangeLanguage() {
@@ -89,15 +105,26 @@ class LanguageProvider {
 
   async changeLanguage(newLanguage, auto) {
     this.autoupdateLanguage = auto;
-    const fallback = {languageTag: newLanguage};
-    const {languageTag} = RNLocalize.findBestAvailableLanguage(fallback);
+    let lnTag;
+    if (newLanguage === this.languageSupported[0]) {
+      lnTag = 'it';
+    } else {
+      lnTag = 'en';
+    }
 
+    const {languageTag, isRTL} = RNLocalize.findBestAvailableLanguage(lnTag);
+
+    // clear translation cache
     this.bundle.cache.clear();
+    // update layout direction
+    I18nManager.forceRTL(isRTL);
 
+    // set i18n-js config
     I18n.translations = {
-      [languageTag]: this.translationGetters[languageTag](),
+      [languageTag]: this.translationGetters[languageTag],
     };
     I18n.locale = languageTag;
+    RNRestart.Restart();
   }
 
   getCurrentLanguage() {
