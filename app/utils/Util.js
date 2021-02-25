@@ -15,8 +15,6 @@
  */
 'use strict';
 
-import NetInfo from '@react-native-community/netinfo';
-
 const LOG_TAG = new Date().toISOString() + ' ' + 'Util.js ';
 
 class Util {
@@ -55,19 +53,6 @@ class Util {
       .toTimeString()
       .substr(0, 5)
       .toString();
-  }
-
-  static async doCheckDeviceNetwork() {
-    let connectionIsReady = false;
-    await NetInfo.fetch().then(state => {
-      connectionIsReady = state.isConnected;
-      console.debug(
-        LOG_TAG,
-        'Network device is ',
-        connectionIsReady === true ? 'enable' : 'disable',
-      );
-    });
-    return connectionIsReady;
   }
 
   static doCapitalizeString(notCapitalizedString) {

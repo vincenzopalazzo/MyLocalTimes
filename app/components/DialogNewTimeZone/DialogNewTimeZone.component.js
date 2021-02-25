@@ -20,7 +20,6 @@ import KeyboardSpacer from 'react-native-keyboard-spacer';
 import {View, Platform} from 'react-native';
 import {BottomModal, ModalContent, ModalTitle} from 'react-native-modals';
 import {Button, Chip, withTheme, TextInput} from 'react-native-paper';
-import NetInfo from '@react-native-community/netinfo';
 import DialogNewTimeZoneStyle from './DialogNewTimeZone.component.style';
 import CreateNewPersonalTimeZone from '../../utils/actions/CreateNewPersonalTimeZone';
 import MyLocalTimesErrorDialog from '../ErrorDialog/MyLocalTimesErrorDialog.component';
