@@ -17,11 +17,12 @@
 import {StyleSheet, Platform} from 'react-native';
 
 import DeviceInfo from 'react-native-device-info';
+import Theme from './Theme.style';
 
 export default StyleSheet.create({
   droidSafeAreaTop: {
     flex: 0,
-    backgroundColor: '#2780E3',
+    backgroundColor: Theme.lite.accent,
     paddingTop:
       Platform.OS === 'android' && DeviceInfo.hasNotch === true ? 25 : 0,
   },

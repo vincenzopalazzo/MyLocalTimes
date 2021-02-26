@@ -15,7 +15,7 @@
  */
 'use strict';
 
-import NetInfo from '@react-native-community/netinfo';
+import * as RNLocalize from 'react-native-localize';
 
 const LOG_TAG = new Date().toISOString() + ' ' + 'Util.js ';
 
@@ -57,19 +57,6 @@ class Util {
       .toString();
   }
 
-  static async doCheckDeviceNetwork() {
-    let connectionIsReady = false;
-    await NetInfo.fetch().then(state => {
-      connectionIsReady = state.isConnected;
-      console.debug(
-        LOG_TAG,
-        'Network device is ',
-        connectionIsReady === true ? 'enable' : 'disable',
-      );
-    });
-    return connectionIsReady;
-  }
-
   static doCapitalizeString(notCapitalizedString) {
     if (!notCapitalizedString) {
       throw new Error(
@@ -81,6 +68,16 @@ class Util {
       notCapitalizedString.charAt(0).toUpperCase() +
       notCapitalizedString.slice(1)
     );
+  }
+
+  static getTimeFormatPreferer() {
+    const value = RNLocalize.uses24HourClock();
+    console.debug(LOG_TAG, `24 Hours time enabled by phone: ${value}`);
+    return value;
+  }
+
+  static getUserTimeZone() {
+    return RNLocalize.getTimeZone();
   }
 }
 

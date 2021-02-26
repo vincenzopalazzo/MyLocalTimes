@@ -13,12 +13,10 @@
  * You should have received a copy of the GNU General Public License along with this program;
  * if not, write to the Free Software Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  */
-
 import GlobalStyle from './index.style';
 import ThemeManager from './Theme.style';
 
 import React, {Component} from 'react';
-
 import {
   Provider as PaperProvider,
   FAB,
@@ -26,21 +24,18 @@ import {
   ActivityIndicator,
   withTheme,
 } from 'react-native-paper';
-
 import ScrollViewCardsTime from './components/ScrollViewCardsTime/ScrollViewCardsTime.component';
 import ComponentStyle from './components/ScrollViewCardsTime/ScollViewCardsTime.component.style';
 import DialogNewTimeZone from './components/DialogNewTimeZone/DialogNewTimeZone.component';
-import DAOAndroidStorage from './utils/DAOAndroidStorage';
-
+import DAOAppStorage from './utils/DAOAppStorage';
 import LanguageProvider from './utils/LanguageProvider';
 import Constant from './utils/Constant';
-import MyLocalTimeAppBar from './components/LocalTimeDrawer/LocalTimeDrawer.component';
-import {SafeAreaView, StatusBar, View} from 'react-native';
+import MyLocalTimeAppBar from './components/LocalTimeDrawer/LocalTimeAppBar.component';
+import {SafeAreaView, StatusBar} from 'react-native';
 import MomentTimeZone from './utils/actions/MomentTimeZone';
 import TimeZoneCity from './utils/model/TimeZoneCity';
 
 const LOG_TAG = new Date().toISOString() + ' ' + 'index.js';
-
 const LITE_THEME = ThemeManager.lite;
 
 /**
@@ -127,7 +122,7 @@ class MyBetweenTime extends Component {
       dialogVisible: false,
     });
     try {
-      await DAOAndroidStorage.putObjectWithKey(
+      await DAOAppStorage.putObjectWithKey(
         Constant.modelMediator.REPOSITORY,
         this.state.dataSource,
       );
@@ -169,22 +164,22 @@ class MyBetweenTime extends Component {
 
   async componentDidMount(): void {
     console.debug(LOG_TAG, 'Component Did mount');
-    let init = await DAOAndroidStorage.getObjectWithKey(
+    let init = await DAOAppStorage.getObjectWithKey(
       Constant.modelMediator.INIT,
     );
     if (!init) {
       //Initialize APP
-      await DAOAndroidStorage.putObjectWithKey(
+      await DAOAppStorage.putObjectWithKey(
         Constant.modelMediator.INIT,
         true,
       );
-      await DAOAndroidStorage.putObjectWithKey(
+      await DAOAppStorage.putObjectWithKey(
         Constant.modelMediator.REPOSITORY,
         this.state.dataSource,
       );
     } else {
       //Using dataStored
-      let dataSource = await DAOAndroidStorage.getObjectWithKey(
+      let dataSource = await DAOAppStorage.getObjectWithKey(
         Constant.modelMediator.REPOSITORY,
       );
       let dataSourceObj = dataSource.map(item =>
@@ -206,7 +201,7 @@ class MyBetweenTime extends Component {
     if (interval) {
       clearInterval(interval);
     }
-    await DAOAndroidStorage.putObjectWithKey(
+    await DAOAppStorage.putObjectWithKey(
       Constant.modelMediator.REPOSITORY,
       this.state.dataSource,
     );
@@ -216,12 +211,18 @@ class MyBetweenTime extends Component {
     return (
       <PaperProvider theme={LITE_THEME}>
         <StatusBar
-          backgroundColor={LITE_THEME.colors.primary}
+          backgroundColor={LITE_THEME.colors.accent}
           barStyle="light-content"
         />
         <SafeAreaView style={GlobalStyle.droidSafeAreaTop} />
         <SafeAreaView style={GlobalStyle.droidSafeAreaDown}>
-          <MyLocalTimeAppBar />
+          <MyLocalTimeAppBar
+            title={LanguageProvider.getInstance().getTranslate(
+              Constant.language.HOME_titleAppBar,
+            )}
+            nameIcon="menu"
+            action={this.props.navigation.openDrawer}
+          />
           <ScrollViewCardsTime
             data={this.state.dataSource}
             onComunicate={this.doCloseSnackBar}

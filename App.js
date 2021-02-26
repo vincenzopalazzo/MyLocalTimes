@@ -1,5 +1,5 @@
 import {AppRegistry} from 'react-native';
-import app from './app/index';
+import MyLocalTimesApp from './app/App.component';
 
-AppRegistry.registerComponent('NoteTaker', () => app);
-export default app;
+AppRegistry.registerComponent('NoteTaker', () => MyLocalTimesApp);
+export default MyLocalTimesApp;

@@ -1,10 +1,14 @@
 import 'react-native';
 import React from 'react';
-import mockRNCNetInfo from '@react-native-community/netinfo/jest/netinfo-mock.js';
 import MomentTimeZone from '../app/utils/actions/MomentTimeZone';
 import moment from 'moment-timezone';
 
-jest.mock('@react-native-community/netinfo', () => mockRNCNetInfo);
+jest.mock('react-native-localize', () => {
+  return {
+    getLocales: jest.fn(),
+    // you can add other functions mock here that you are using
+  };
+});
 
 const NAME_TEST = 'MomentTimeZoneTest';
 

@@ -16,12 +16,15 @@
 'use strict';
 
 import * as RNLocalize from 'react-native-localize';
+import RNRestart from 'react-native-restart';
 import I18n from 'i18n-js';
 import {I18nManager} from 'react-native';
 import memoize from 'lodash.memoize';
-
 import en from '../config/language/en';
 import it from '../config/language/it';
+import Constant from './Constant';
+
+const LOG_TAG = new Date().toISOString() + ' ' + 'LanguageProvider.js';
 
 let _SINGLETON;
 
@@ -38,25 +41,80 @@ class LanguageProvider {
       (key, config) => I18n.t(key, config),
       (key, config) => (config ? key + JSON.stringify(config) : key),
     );
-    this._initSupportedLanguage();
-    this._configureBundle();
-  }
-
-  _initSupportedLanguage() {
     this.translationGetters = {
       en,
       it,
     };
+    this.languageSupported = [
+      Constant.language.ITALIAN_SUPPORT,
+      Constant.language.ENGLISH_US_SUPPORT,
+      Constant.language.AUTO_LANGUAGE,
+    ];
+
+    this.autoupdateLanguage = true;
+    this._configureBundle();
   }
 
   _configureBundle() {
     // fallback if no available language fits
-    const fallback = {languageTag: 'en', isRTL: false};
+    if (this.autoupdateLanguage === true) {
+      const fallback = {languageTag: 'en', isRTL: false};
 
-    const {languageTag, isRTL} =
-      RNLocalize.findBestAvailableLanguage(
-        Object.keys(this.translationGetters),
-      ) || fallback;
+      const {languageTag, isRTL} =
+        RNLocalize.findBestAvailableLanguage(
+          Object.keys(this.translationGetters),
+        ) || fallback;
+
+      // clear translation cache
+      this.bundle.cache.clear();
+      // update layout direction
+      I18nManager.forceRTL(isRTL);
+
+      // set i18n-js config
+      I18n.translations = {
+        [languageTag]: this.translationGetters[languageTag],
+      };
+      I18n.locale = languageTag;
+    } else {
+      let actual = I18n.locale;
+      const {languageTag, isRTL} = RNLocalize.findBestAvailableLanguage(actual);
+
+      // clear translation cache
+      this.bundle.cache.clear();
+      // update layout direction
+      I18nManager.forceRTL(isRTL);
+
+      // set i18n-js config
+      I18n.translations = {
+        [languageTag]: this.translationGetters[languageTag],
+      };
+      I18n.locale = languageTag;
+    }
+  }
+
+  _isChangeLanguage() {
+    if (!this.autoupdateLanguage) {
+      return false;
+    }
+    let actualLanguage = RNLocalize.getLocales()[0].languageCode;
+    console.debug(LOG_TAG, `Actual language: ${actualLanguage}`);
+    console.debug(LOG_TAG, `Bundle language: ${I18n.locale}`);
+    return actualLanguage !== I18n.locale;
+  }
+
+  async changeLanguage(newLanguage, auto) {
+    this.autoupdateLanguage = auto;
+    let lnTag;
+    if (this.languageSupported[0].toLowerCase().includes(newLanguage)) {
+      lnTag = 'it';
+    } else if (this.languageSupported[1].toLowerCase().includes(newLanguage)) {
+      lnTag = 'en';
+    } else {
+      throw Error('FUCK');
+    }
+    console.error(newLanguage);
+    console.error(lnTag);
+    const {languageTag, isRTL} = RNLocalize.findBestAvailableLanguage(lnTag);
 
     // clear translation cache
     this.bundle.cache.clear();
@@ -64,11 +122,34 @@ class LanguageProvider {
     I18nManager.forceRTL(isRTL);
 
     // set i18n-js config
-    I18n.translations = {[languageTag]: this.translationGetters[languageTag]};
+    I18n.translations = {
+      [languageTag]: this.translationGetters[languageTag],
+    };
     I18n.locale = languageTag;
+    RNRestart.Restart();
+  }
+
+  getCurrentLanguage() {
+    if (this.autoupdateLanguage) {
+      return this.getTranslate(Constant.language.AUTO_LANGUAGE);
+    }
+    let actualLanguage = RNLocalize.getLocales()[0].languageCode;
+    if (actualLanguage === 'it') {
+      return this.getTranslate(Constant.language.ITALIAN_SUPPORT);
+    } else if (actualLanguage === 'en') {
+      return this.getTranslate(Constant.language.ENGLISH_US_SUPPORT);
+    }
+  }
+
+  getLanguageSupport() {
+    return this.languageSupported.map(item => this.getTranslate(item));
   }
 
   getTranslate(key) {
+    if (this._isChangeLanguage()) {
+      console.debug(LOG_TAG, 'Language changed');
+      this._configureBundle();
+    }
     return this.bundle(key);
   }
 }

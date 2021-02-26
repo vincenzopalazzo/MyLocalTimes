@@ -13,26 +13,20 @@
  * You should have received a copy of the GNU General Public License along with this program;
  * if not, write to the Free Software Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  */
-
 'use strict';
 
 import React, {Component} from 'react';
-
+import KeyboardSpacer from 'react-native-keyboard-spacer';
 import {View, Platform} from 'react-native';
-
 import {BottomModal, ModalContent, ModalTitle} from 'react-native-modals';
 import {Button, Chip, withTheme, TextInput} from 'react-native-paper';
-import NetInfo from '@react-native-community/netinfo';
-
 import DialogNewTimeZoneStyle from './DialogNewTimeZone.component.style';
-
 import CreateNewPersonalTimeZone from '../../utils/actions/CreateNewPersonalTimeZone';
-import KeyboardSpacer from 'react-native-keyboard-spacer';
 import MyLocalTimesErrorDialog from '../ErrorDialog/MyLocalTimesErrorDialog.component';
 import LanguageProvider from '../../utils/LanguageProvider';
 import Constant from '../../utils/Constant';
 
-const LOG_TAG = new Date().toISOString() + ' ' + 'DialogNewTimeZone.js';
+const LOG_TAG = `${new Date().toISOString()} DialogNewTimeZone.js`;
 
 class DialogNewTimeZone extends Component {
   constructor(props) {
@@ -41,9 +35,9 @@ class DialogNewTimeZone extends Component {
     this.state = {
       nameCity: undefined,
       nameCountry: undefined,
-      unsubscribeNetworkEvent: undefined,
       componentEnabled: true,
-      modalDialog: false,
+      visibleErrDialog: false,
+      closeDialogAction: undefined,
     };
 
     this.doCreateNewTimeZone = this.doCreateNewTimeZone.bind(this);
@@ -52,7 +46,7 @@ class DialogNewTimeZone extends Component {
 
   setDialogVisible(value) {
     this.setState({
-      modalDialog: value,
+      visibleErrDialog: value,
     });
   }
 
@@ -65,7 +59,7 @@ class DialogNewTimeZone extends Component {
           this.state.nameCountry,
         );
       } catch (e) {
-        console.warn(LOG_TAG, e.message);
+        console.debug(LOG_TAG, e.message);
         this.setDialogVisible(true);
         return;
       }
@@ -84,24 +78,6 @@ class DialogNewTimeZone extends Component {
     }
   }
 
-  componentDidMount() {
-    let unsubscribe = NetInfo.addEventListener(state => {
-      this.setState({
-        componentEnabled: state.isConnected,
-      });
-    });
-    this.setState({
-      unsubscribeNetworkEvent: unsubscribe,
-    });
-  }
-
-  componentWillUnmount() {
-    let unsubscribeNetworkEvent = this.state.unsubscribeNetworkEvent;
-    if (unsubscribeNetworkEvent !== undefined) {
-      unsubscribeNetworkEvent();
-    }
-  }
-
   render() {
     let {visible, title} = this.props;
     return (
@@ -109,7 +85,7 @@ class DialogNewTimeZone extends Component {
         <BottomModal
           width={0.9}
           rounded
-          visible={visible}
+          visible={visible && !this.state.visibleErrDialog}
           onClose={this.props.onClose}
           onTouchOutside={() => this.props.setState({dialogVisible: false})}
           onSwipeOut={() => this.props.setState({dialogVisible: false})}
@@ -146,27 +122,18 @@ class DialogNewTimeZone extends Component {
                 )}
               </Button>
             </View>
-            <Chip
-              style={DialogNewTimeZoneStyle.chipInfo}
-              icon="information"
-              disabled={true}
-              onPress={() => console.log('Pressed')}>
-              {LanguageProvider.getInstance().getTranslate(
-                Constant.language.NEW_TIME_ZONE_INFO_TEXT,
-              )}
-            </Chip>
             {Platform.OS === 'ios' && <KeyboardSpacer />}
           </ModalContent>
-          {this.state.modalDialog && (
-            <MyLocalTimesErrorDialog
-              visible={this.state.modalDialog}
-              closeDialog={this.setDialogVisible}
-              message={LanguageProvider.getInstance().getTranslate(
-                Constant.language.ERROR_DIALOG_MESSAGE,
-              )}
-            />
-          )}
         </BottomModal>
+        {this.state.visibleErrDialog && (
+          <MyLocalTimesErrorDialog
+            visible={this.state.visibleErrDialog}
+            closeDialog={this.setDialogVisible}
+            message={LanguageProvider.getInstance().getTranslate(
+              Constant.language.ERROR_DIALOG_MESSAGE,
+            )}
+          />
+        )}
       </View>
     );
   }

@@ -176,9 +176,14 @@ android {
 
         }
     }
+
+     dexOptions {
+        javaMaxHeapSize "4g"
+     }
 }
 
 dependencies {
+    implementation project(':react-native-localize')
     implementation project(':react-native-device-info')
     implementation project(':react-native-vector-icons')
     implementation fileTree(dir: "libs", include: ["*.jar"])

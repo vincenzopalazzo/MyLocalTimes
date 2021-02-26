@@ -1,72 +1,92 @@
-/**
- * MyLocalTimes is an mobile app for consulting the local time of the cities.
- * Copyright (C) 2020 Vincenzo Palazzo vincenzopalazzodev@gmail.com
-
- * This program is free software; you can redistribute it and/or modify it under the terms
- * of the GNU General Public License as published by the Free Software Foundation; either
- * version 2 of the License, or (at your option) any later version.
-
- * This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY;
- * without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
- * See the GNU General Public License for more details.
-
- * You should have received a copy of the GNU General Public License along with this program;
- * if not, write to the Free Software Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
- */
-/*
-<StatusBar
-          backgroundColor={LITE_THEME.colors.primary}
-          barStyle="light-content"
-        />
-        <SafeAreaView style={GlobalStyle.droidSafeAreaTop} />
-        <SafeAreaView style={GlobalStyle.droidSafeAreaDown}>
-          <Appbar.Header style={GlobalStyle.appBar}>
-            <Appbar.Action
-              icon="menu"
-              onPress={console.log(LOG_TAG, 'Open drawer')}
-            />
-            <Appbar.Content
-              title={LanguageProvider.getInstance().getTranslate(
-                Constant.language.HOME_titleAppBar,
-              )}
-            />
-            <Avatar.Image size={35} source={require('./assets/avatar.png')} />
-          </Appbar.Header>
-          </SafeAreaView>
-
- */
-
-'use strict';
-
 import React, {Component} from 'react';
-import {SafeAreaView, StatusBar, View} from 'react-native';
-import {Appbar, Avatar} from 'react-native-paper';
-import Constant from '../../utils/Constant';
+
+import {Avatar, Drawer, withTheme} from 'react-native-paper';
+import {View} from 'react-native';
+import styles from './MyLocalTimeDrawer.style';
+import Theme from '../../Theme.style';
+import {DrawerContentScrollView} from '@react-navigation/drawer';
 import LanguageProvider from '../../utils/LanguageProvider';
+import Constant from '../../utils/Constant';
+import ShareAppAction from '../../utils/actions/ShareAppAction';
+import RateAppAction from '../../utils/actions/RateAppAction';
 
-import ThemeManager from '../../Theme.style';
-import GlobalStyle from '../../index.style';
+class LocalTimeDrawer extends Component {
+  constructor(props) {
+    super(props);
 
-const LITE_THEME = ThemeManager.lite;
-const LOG_TAG = new Date().toISOString() + ' ' + 'LocalTimeDrawer.component.js';
+    this.onShare = this.onShare.bind(this);
+    this.onRate = this.onRate.bind(this);
+  }
 
-class MyLocalTimeAppBar extends Component {
+  async onShare() {
+    try {
+      await ShareAppAction.doShareWith(
+        LanguageProvider.getInstance().getTranslate(
+          Constant.language.SHARE_MESSAGE,
+        ),
+      );
+    } catch (e) {}
+  }
+
+  onRate() {
+    RateAppAction.doRateApp();
+  }
+
   render() {
+    const {navigation} = this.props;
     return (
-        <Appbar.Header style={GlobalStyle.appBar}>
-          <Appbar.Action
-            icon="menu"
-            onPress={console.log(LOG_TAG, 'Open drawer')}
-          />
-          <Appbar.Content
-            title={LanguageProvider.getInstance().getTranslate(
-              Constant.language.HOME_titleAppBar,
+      <View style={{flex: 1}}>
+        <View style={styles.drawerContent}>
+          <View style={styles.userInfoSection}>
+            <View style={{flexDirection: 'row', marginTop: 15}}>
+              <Avatar.Image
+                theme={Theme.lite}
+                source={{
+                  uri: 'https://i.redd.it/xqepnsbdt5301.png',
+                }}
+                size={65}
+              />
+            </View>
+          </View>
+        </View>
+        <DrawerContentScrollView {...this.props}>
+          <Drawer.Section>
+            <Drawer.Item
+              icon="home"
+              label={LanguageProvider.getInstance().getTranslate(
+                Constant.language.DRAWER_HOME,
+              )}
+              onPress={() => navigation.navigate(Constant.navigation.HOME)}
+            />
+            <Drawer.Item
+              icon="settings"
+              label={LanguageProvider.getInstance().getTranslate(
+                Constant.language.DRAWER_SETTING,
+              )}
+              onPress={() => navigation.navigate(Constant.navigation.SETTING)}
+            />
+          </Drawer.Section>
+        </DrawerContentScrollView>
+
+        <Drawer.Section style={styles.bottomDrawerSection}>
+          <Drawer.Item
+            icon="share-variant"
+            label={LanguageProvider.getInstance().getTranslate(
+              Constant.language.DRAWER_SHARE,
             )}
+            onPress={() => this.onShare()}
           />
-          <Avatar.Image size={35} source={require('../../assets/avatar.png')} />
-        </Appbar.Header>
+          <Drawer.Item
+            icon="star"
+            label={LanguageProvider.getInstance().getTranslate(
+              Constant.language.DRAWER_RATE,
+            )}
+            onPress={() => this.onRate()}
+          />
+        </Drawer.Section>
+      </View>
     );
   }
 }
 
-export default MyLocalTimeAppBar;
+export default withTheme(LocalTimeDrawer);
