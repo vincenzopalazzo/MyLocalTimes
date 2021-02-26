@@ -54,8 +54,6 @@ class DialogChooseLanguageComponent extends Component {
     });
   }
 
-  componentWillUnmount() {}
-
   async changeLanguage() {
     console.debug(LOG_TAG, `Language selected ${this.state.languageSelected}`);
     this.props.onDismiss();

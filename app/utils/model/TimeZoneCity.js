@@ -25,7 +25,7 @@ class TimeZoneCity {
       this.time = timeZoneCity.time;
       this.id = timeZoneCity.id;
       if (!this.id) {
-        this.id = Math.random() * 100000 | 0;
+        this.id = (Math.random() * 100000) | 0;
       }
     }
   }
