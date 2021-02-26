@@ -34,38 +34,52 @@ class MyLocalTimesSetting extends Component {
     super(props);
     this.state = {
       lanDialogVisible: false,
-      typeHoursFormat: true, // true is for 24h and false is for 12h,
-      darkTheme: false,
     };
 
     this.onShare = this.onShare.bind(this);
     this.onRate = this.onRate.bind(this);
     this.closeLanguageDialog = this.closeLanguageDialog.bind(this);
+    this.checkOnDatabase = this.checkOnDatabase.bind(this);
+    this.changeValueTheme = this.changeValueTheme.bind(this);
+    this.changeValueTimeFormat = this.changeValueTimeFormat.bind(this);
   }
 
-  componentDidMount() {
-    let typeHoursFormat = DAOAndroidStorage.getObjectWithKeyDefVal(
+  async checkOnDatabase() {
+    let typeHoursFormat = await DAOAndroidStorage.getObjectWithKeyDefVal(
       'typeHoursFormat',
       true,
     );
-    let darkTheme = DAOAndroidStorage.getObjectWithKeyDefVal(
+    let darkTheme = await DAOAndroidStorage.getObjectWithKeyDefVal(
       'darkTheme',
       false,
     );
+    console.debug(`${darkTheme} ${typeHoursFormat}`);
     this.setState({
       typeHoursFormat: typeHoursFormat,
       darkTheme: darkTheme,
     });
-    console.debug(LOG_TAG, 'componentDidMount Called');
   }
 
-  componentWillUnmount() {
-    DAOAndroidStorage.putObjectWithKey(
-      'typeHoursFormat',
-      this.state.typeHoursFormat,
+  changeValueTheme(newValue) {
+    this.setState({
+      darkTheme: newValue,
+    });
+    DAOAndroidStorage.putObjectWithKey('darkTheme', newValue).catch(e =>
+      console.error(`Error generated is ${e}`),
     );
-    DAOAndroidStorage.putObjectWithKey('darkTheme', this.state.darkTheme);
-    console.debug(LOG_TAG, 'componentWillUnmount Called');
+  }
+
+  changeValueTimeFormat(newValue) {
+    this.setState({
+      typeHoursFormat: newValue,
+    });
+    DAOAndroidStorage.putObjectWithKey('typeHoursFormat', newValue).catch(e =>
+      console.error(`Error generated is ${e}`),
+    );
+  }
+
+  async componentDidMount() {
+    await this.checkOnDatabase();
   }
 
   async onShare() {
@@ -91,7 +105,7 @@ class MyLocalTimesSetting extends Component {
   render() {
     const theme = Theme.lite;
     return (
-      <ScrollView>
+      <ScrollView theme={theme}>
         <MyLocalTimeAppBar
           title={LanguageProvider.getInstance().getTranslate(
             Constant.language.HOME_titleAppBar,
@@ -113,9 +127,7 @@ class MyLocalTimesSetting extends Component {
                 theme={theme}
                 value={this.state.typeHoursFormat}
                 onValueChange={() =>
-                  this.setState({
-                    typeHoursFormat: !this.state.typeHoursFormat,
-                  })
+                  this.changeValueTimeFormat(!this.state.typeHoursFormat)
                 }
               />
             )}
@@ -149,7 +161,7 @@ class MyLocalTimesSetting extends Component {
                 theme={theme}
                 value={this.state.darkTheme}
                 onValueChange={() =>
-                  this.setState({darkTheme: !this.state.darkTheme})
+                  this.changeValueTheme(!this.state.darkTheme)
                 }
               />
             )}

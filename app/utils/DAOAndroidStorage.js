@@ -21,7 +21,9 @@ const LOG_TAG = new Date().toISOString() + ' ' + 'DAOAndroidStorage.js';
 
 class DAOAndroidStorage {
   static async putObjectWithKey(key, object) {
-    if (!key || !object) {
+    if (!key || object === undefined) {
+      console.error(`Key ${key}`);
+      console.error(`Value ${object}`);
       throw new Error('Key or object are null');
     }
     try {
@@ -38,6 +40,9 @@ class DAOAndroidStorage {
     }
     try {
       let item = await AsyncStorage.getItem(key);
+      if (!item) {
+        return undefined;
+      }
       return JSON.parse(item);
     } catch (e) {
       console.warn(LOG_TAG, `Error generated is ${e.message}`);
@@ -45,20 +50,30 @@ class DAOAndroidStorage {
     }
   }
 
-  static async getObjectWithKeyDefVal(key, defVal) {
-    let val = DAOAndroidStorage.getObjectWithKey(key);
-    if (val === undefined) {
-      return defVal;
+  static async removeObjectWithKey(key) {
+    if (!key) {
+      throw new Error('key is null');
     }
-    return val;
+    try {
+      await AsyncStorage.removeItem(key);
+    } catch (e) {
+      console.warn(LOG_TAG, `Error generated is ${e.message}`);
+      throw e;
+    }
   }
 
-  static async mergeObjectWithKey(key) {
-    if (!key) {
-      throw new Error('Key is null');
+  static async getObjectWithKeyDefVal(key, defVal) {
+    try {
+      let val = await DAOAndroidStorage.getObjectWithKey(key);
+      if (val === undefined) {
+        await DAOAndroidStorage.putObjectWithKey(key, defVal);
+        return await DAOAndroidStorage.getObjectWithKey(key);
+      }
+      return val;
+    } catch (e) {
+      console.warn(LOG_TAG, `Error generated is ${e.message}`);
+      throw e;
     }
-    //TODO
-    throw new Error('method mergeObjectWithKey not implemented');
   }
 }
 
