@@ -32,13 +32,13 @@ I'm traveling to Phoenix to Arizona for a few months and for applying my react-n
 
 Yes, absolutely, I'm developing this application for learning react-native and improve my mobile develop skills, this project should be improved with the following addons:
 
-- [ ] Introduce the patter MVC, in particular, the application component must be sub-divide in a "View" component and a "Control" component;
+- [ ] Introduce the patter MVC, in particular, the application component must be sub-divide in a "View" components, and a "Control" component;
 
-- [ ] Try to remove the API and work only with the library [Moment.js](https://momentjs.com/) or simile libraries;
+- [X] Try to remove the API and work only with the library [Moment.js](https://momentjs.com/) or simile libraries;
 
-- [ ] Support different language, like:
-    - [ ] English
-    - [ ] Italian
+- [X] Support different language, like:
+    - [X] English
+    - [X] Italian
     - [ ] Spanish
     - [ ] France
 
@@ -52,16 +52,10 @@ Yes, absolutely, I'm developing this application for learning react-native and i
 
 MyLocalTimes is an mobile app for consulting the local time of the cities.
 
-Copyright (C) 2020 Vincenzo Palazzo vincenzopalazzodev@gmail.com
+Copyright (C) 2020-2021 Vincenzo Palazzo vincenzopalazzodev@gmail.com
 
 This program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation; either version 2 of the License, or (at your option) any later version.
 
 This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
 
 You should have received a copy of the GNU General Public License along with this program; if not, write to the Free Software Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
-
-## Other information
-
-This application was incubated on Gitlab at this link [https://gitlab.com/palazzovincenzo/mybetweentime](https://gitlab.com/palazzovincenzo/mybetweentime) and its previous name was MyBetweenTime.
-
-The last version on Gitlab was "0.2 beta" and the next version reside on Github at this link [https://github.com/vincenzopalazzo/MyTimeZones](https://github.com/vincenzopalazzo/MyTimeZones)
