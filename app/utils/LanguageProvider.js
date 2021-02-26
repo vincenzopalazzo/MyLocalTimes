@@ -20,7 +20,6 @@ import RNRestart from 'react-native-restart';
 import I18n from 'i18n-js';
 import {I18nManager} from 'react-native';
 import memoize from 'lodash.memoize';
-
 import en from '../config/language/en';
 import it from '../config/language/it';
 import Constant from './Constant';
@@ -106,12 +105,15 @@ class LanguageProvider {
   async changeLanguage(newLanguage, auto) {
     this.autoupdateLanguage = auto;
     let lnTag;
-    if (newLanguage === this.languageSupported[0]) {
+    if (this.languageSupported[0].toLowerCase().includes(newLanguage)) {
       lnTag = 'it';
-    } else {
+    } else if (this.languageSupported[1].toLowerCase().includes(newLanguage)) {
       lnTag = 'en';
+    } else {
+      throw Error('FUCK');
     }
-
+    console.error(newLanguage);
+    console.error(lnTag);
     const {languageTag, isRTL} = RNLocalize.findBestAvailableLanguage(lnTag);
 
     // clear translation cache

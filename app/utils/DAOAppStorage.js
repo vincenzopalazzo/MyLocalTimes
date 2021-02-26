@@ -17,9 +17,9 @@
 
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-const LOG_TAG = new Date().toISOString() + ' ' + 'DAOAndroidStorage.js';
+const LOG_TAG = new Date().toISOString() + ' ' + 'DAOAppStorage.js';
 
-class DAOAndroidStorage {
+class DAOAppStorage {
   static async putObjectWithKey(key, object) {
     if (!key || object === undefined) {
       console.error(`Key ${key}`);
@@ -64,10 +64,10 @@ class DAOAndroidStorage {
 
   static async getObjectWithKeyDefVal(key, defVal) {
     try {
-      let val = await DAOAndroidStorage.getObjectWithKey(key);
+      let val = await DAOAppStorage.getObjectWithKey(key);
       if (val === undefined) {
-        await DAOAndroidStorage.putObjectWithKey(key, defVal);
-        return await DAOAndroidStorage.getObjectWithKey(key);
+        await DAOAppStorage.putObjectWithKey(key, defVal);
+        return await DAOAppStorage.getObjectWithKey(key);
       }
       return val;
     } catch (e) {
@@ -77,4 +77,4 @@ class DAOAndroidStorage {
   }
 }
 
-export default DAOAndroidStorage;
+export default DAOAppStorage;

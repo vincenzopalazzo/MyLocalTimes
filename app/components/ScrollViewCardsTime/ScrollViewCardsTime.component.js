@@ -20,7 +20,7 @@ import React, {Component} from 'react';
 import {FlatList, View} from 'react-native';
 import {withTheme} from 'react-native-paper';
 import CardTime from '../CardTime/CardTime.component';
-import DAOAndroidStorage from '../../utils/DAOAndroidStorage';
+import DAOAppStorage from '../../utils/DAOAppStorage';
 import Constant from '../../utils/Constant';
 
 class ScrollViewCardsTime extends Component {
@@ -47,7 +47,7 @@ class ScrollViewCardsTime extends Component {
       this.props.setState({
         dataSource: dataSource,
       });
-      DAOAndroidStorage.putObjectWithKey(
+      DAOAppStorage.putObjectWithKey(
         Constant.modelMediator.REPOSITORY,
         dataSource,
       ).catch(error => {

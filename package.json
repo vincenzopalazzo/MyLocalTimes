@@ -27,7 +27,7 @@
     "react-native-device-info": "^5.5.1",
     "react-native-gesture-handler": "^1.6.1",
     "react-native-keyboard-spacer": "^0.4.1",
-    "react-native-localize": "^2.0.1",
+    "react-native-localize": "^2.0.2",
     "react-native-modals": "^0.19.10",
     "react-native-paper": "^4.5.0",
     "react-native-rate": "^1.2.1",

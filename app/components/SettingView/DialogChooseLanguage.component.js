@@ -21,7 +21,7 @@ import {withTheme, Dialog, RadioButton, Text, Button} from 'react-native-paper';
 import LanguageProvider from '../../utils/LanguageProvider';
 import Theme from '../../Theme.style';
 import Constant from '../../utils/Constant';
-import DAOAndroidStorage from '../../utils/DAOAndroidStorage';
+import DAOAppStorage from '../../utils/DAOAppStorage';
 
 const LOG_TAG =
   new Date().toISOString() + ' ' + 'DialogChooseLanguage.component.js';
@@ -29,17 +29,23 @@ const LOG_TAG =
 class DialogChooseLanguageComponent extends Component {
   constructor(props) {
     super(props);
-
     this.state = {
       languageSelected: LanguageProvider.getInstance().getCurrentLanguage(),
     };
 
     this.changeLanguage = this.changeLanguage.bind(this);
-    this.setLanguageSelected = this.setLanguageSelected.bind(this);
+    this.changeLanguageSelected = this.changeLanguageSelected.bind(this);
   }
 
-  componentDidMount() {
-    let languageSelected = DAOAndroidStorage.getObjectWithKeyDefVal(
+  changeLanguageSelected(newValue) {
+    this.setState({
+      languageSelected: newValue,
+    });
+    DAOAppStorage.putObjectWithKey('languageSelected', newValue);
+  }
+
+  async componentDidMount() {
+    let languageSelected = await DAOAppStorage.getObjectWithKeyDefVal(
       'languageSelected',
       this.state.languageSelected,
     );
@@ -48,12 +54,7 @@ class DialogChooseLanguageComponent extends Component {
     });
   }
 
-  componentWillUnmount() {
-    DAOAndroidStorage.putObjectWithKey(
-      'languageSelected',
-      this.state.languageSelected,
-    );
-  }
+  componentWillUnmount() {}
 
   async changeLanguage() {
     console.debug(LOG_TAG, `Language selected ${this.state.languageSelected}`);
@@ -64,16 +65,6 @@ class DialogChooseLanguageComponent extends Component {
     const auto = language === languageSupported[size];
     console.debug(LOG_TAG, `Is Automatic: ${auto}`);
     await LanguageProvider.getInstance().changeLanguage(language, auto);
-  }
-
-  setLanguageSelected(languageSelected) {
-    console.debug(
-      LOG_TAG,
-      `setLanguageSelected: new language selected ${languageSelected}`,
-    );
-    this.setState({
-      languageSelected,
-    });
   }
 
   render() {
@@ -87,7 +78,7 @@ class DialogChooseLanguageComponent extends Component {
           <Dialog.Content>
             <RadioButton.Group
               theme={Theme.lite}
-              onValueChange={value => this.setLanguageSelected(value)}
+              onValueChange={value => this.changeLanguageSelected(value)}
               value={this.state.languageSelected}>
               {LanguageProvider.getInstance()
                 .getLanguageSupport()

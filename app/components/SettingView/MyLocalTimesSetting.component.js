@@ -25,7 +25,7 @@ import Theme from '../../Theme.style';
 import ShareAppAction from '../../utils/actions/ShareAppAction';
 import RateAppAction from '../../utils/actions/RateAppAction';
 import DialogChooseLanguageComponent from './DialogChooseLanguage.component';
-import DAOAndroidStorage from '../../utils/DAOAndroidStorage';
+import DAOAppStorage from '../../utils/DAOAppStorage';
 
 const LOG_TAG = `${new Date().toISOString()} MyLocalTimesSetting.component.js`;
 
@@ -45,11 +45,11 @@ class MyLocalTimesSetting extends Component {
   }
 
   async checkOnDatabase() {
-    let typeHoursFormat = await DAOAndroidStorage.getObjectWithKeyDefVal(
+    let typeHoursFormat = await DAOAppStorage.getObjectWithKeyDefVal(
       'typeHoursFormat',
       true,
     );
-    let darkTheme = await DAOAndroidStorage.getObjectWithKeyDefVal(
+    let darkTheme = await DAOAppStorage.getObjectWithKeyDefVal(
       'darkTheme',
       false,
     );
@@ -64,7 +64,7 @@ class MyLocalTimesSetting extends Component {
     this.setState({
       darkTheme: newValue,
     });
-    DAOAndroidStorage.putObjectWithKey('darkTheme', newValue).catch(e =>
+    DAOAppStorage.putObjectWithKey('darkTheme', newValue).catch(e =>
       console.error(`Error generated is ${e}`),
     );
   }
@@ -73,7 +73,7 @@ class MyLocalTimesSetting extends Component {
     this.setState({
       typeHoursFormat: newValue,
     });
-    DAOAndroidStorage.putObjectWithKey('typeHoursFormat', newValue).catch(e =>
+    DAOAppStorage.putObjectWithKey('typeHoursFormat', newValue).catch(e =>
       console.error(`Error generated is ${e}`),
     );
   }

@@ -21,6 +21,8 @@ import MyBetweenTime from './index';
 import MyLocalTimesSetting from './components/SettingView/MyLocalTimesSetting.component';
 import LocalTimeDrawer from './components/LocalTimeDrawer/LocalTimeDrawer.component';
 import Constant from './utils/Constant';
+import Util from './utils/Util';
+import DAOAppStorage from './utils/DAOAppStorage';
 
 const DrawerNavigation = createDrawerNavigator();
 
@@ -30,6 +32,20 @@ class MyLocalTimesApp extends Component {
     this.state = {
       update: true,
     };
+    this.initDatabaseWithLocalInfo = this.initDatabaseWithLocalInfo.bind(this);
+  }
+
+  async initDatabaseWithLocalInfo() {
+    const timeFormat = Util.getTimeFormatPreferer();
+    await DAOAppStorage.getObjectWithKeyDefVal(
+      Constant.db.TIME_FORMAT,
+      timeFormat,
+    );
+    // TODO: Choose also the APP language
+  }
+
+  async componentDidMount() {
+    await this.initDatabaseWithLocalInfo();
   }
 
   render() {

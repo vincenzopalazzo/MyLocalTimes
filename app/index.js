@@ -27,7 +27,7 @@ import {
 import ScrollViewCardsTime from './components/ScrollViewCardsTime/ScrollViewCardsTime.component';
 import ComponentStyle from './components/ScrollViewCardsTime/ScollViewCardsTime.component.style';
 import DialogNewTimeZone from './components/DialogNewTimeZone/DialogNewTimeZone.component';
-import DAOAndroidStorage from './utils/DAOAndroidStorage';
+import DAOAppStorage from './utils/DAOAppStorage';
 import LanguageProvider from './utils/LanguageProvider';
 import Constant from './utils/Constant';
 import MyLocalTimeAppBar from './components/LocalTimeDrawer/LocalTimeAppBar.component';
@@ -122,7 +122,7 @@ class MyBetweenTime extends Component {
       dialogVisible: false,
     });
     try {
-      await DAOAndroidStorage.putObjectWithKey(
+      await DAOAppStorage.putObjectWithKey(
         Constant.modelMediator.REPOSITORY,
         this.state.dataSource,
       );
@@ -164,22 +164,22 @@ class MyBetweenTime extends Component {
 
   async componentDidMount(): void {
     console.debug(LOG_TAG, 'Component Did mount');
-    let init = await DAOAndroidStorage.getObjectWithKey(
+    let init = await DAOAppStorage.getObjectWithKey(
       Constant.modelMediator.INIT,
     );
     if (!init) {
       //Initialize APP
-      await DAOAndroidStorage.putObjectWithKey(
+      await DAOAppStorage.putObjectWithKey(
         Constant.modelMediator.INIT,
         true,
       );
-      await DAOAndroidStorage.putObjectWithKey(
+      await DAOAppStorage.putObjectWithKey(
         Constant.modelMediator.REPOSITORY,
         this.state.dataSource,
       );
     } else {
       //Using dataStored
-      let dataSource = await DAOAndroidStorage.getObjectWithKey(
+      let dataSource = await DAOAppStorage.getObjectWithKey(
         Constant.modelMediator.REPOSITORY,
       );
       let dataSourceObj = dataSource.map(item =>
@@ -201,7 +201,7 @@ class MyBetweenTime extends Component {
     if (interval) {
       clearInterval(interval);
     }
-    await DAOAndroidStorage.putObjectWithKey(
+    await DAOAppStorage.putObjectWithKey(
       Constant.modelMediator.REPOSITORY,
       this.state.dataSource,
     );

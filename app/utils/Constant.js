@@ -59,4 +59,8 @@ export default {
     HOME: 'HOME',
     SETTING: 'SETTING',
   },
+  db: {
+    TIME_FORMAT: 'typeHoursFormat',
+    DARK_THEME: 'darkTheme',
+  },
 };

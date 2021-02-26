@@ -15,6 +15,8 @@
  */
 'use strict';
 
+import * as RNLocalize from 'react-native-localize';
+
 const LOG_TAG = new Date().toISOString() + ' ' + 'Util.js ';
 
 class Util {
@@ -66,6 +68,16 @@ class Util {
       notCapitalizedString.charAt(0).toUpperCase() +
       notCapitalizedString.slice(1)
     );
+  }
+
+  static getTimeFormatPreferer() {
+    const value = RNLocalize.uses24HourClock();
+    console.debug(LOG_TAG, `24 Hours time enabled by phone: ${value}`);
+    return value;
+  }
+
+  static getUserTimeZone() {
+    return RNLocalize.getTimeZone();
   }
 }
 
