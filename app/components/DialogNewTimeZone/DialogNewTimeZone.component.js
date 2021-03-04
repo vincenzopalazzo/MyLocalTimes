@@ -50,7 +50,7 @@ class DialogNewTimeZone extends Component {
     });
   }
 
-  async doCreateNewTimeZone() {
+  doCreateNewTimeZone() {
     try {
       let newLocalTimeZoneCity;
       try {
@@ -116,7 +116,7 @@ class DialogNewTimeZone extends Component {
                 mode="contained"
                 theme={this.props.theme}
                 disabled={!this.state.componentEnabled}
-                onPress={() => this.doCreateNewTimeZone()}>
+                onPress={this.doCreateNewTimeZone}>
                 {LanguageProvider.getInstance().getTranslate(
                   Constant.language.NEW_TIME_ZONE_SEARCH_TEXT,
                 )}

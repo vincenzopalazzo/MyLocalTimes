@@ -33,7 +33,7 @@ class LocalTimeDrawer extends Component {
   }
 
   render() {
-    const {navigation} = this.props;
+    const {navigation, changeTimeFormat} = this.props;
     return (
       <View style={{flex: 1}}>
         <View style={styles.drawerContent}>

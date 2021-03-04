@@ -48,7 +48,7 @@ test(NAME_TEST + '.Phoenix/Arizona_AMPM', () => {
   let city = 'Phoenix';
   let country = 'America';
   let result = MomentTimeZone.timeZoneWithCityAnCountry(city, country, false);
-  let expected = moment.tz(`${country}/${city}`).format('HH:mm A'); //24h format
+  let expected = moment.tz(`${country}/${city}`).format('h:mm A'); //24h format
   expect(result).toBe(expected);
 });
 
@@ -56,21 +56,21 @@ test(NAME_TEST + '.Rome/Europe_AMPM', () => {
   let city = 'Rome';
   let country = 'Europe';
   let result = MomentTimeZone.timeZoneWithCityAnCountry(city, country, false);
-  let expected = moment.tz(`${country}/${city}`).format('HH:mm A'); //24h format
+  let expected = moment.tz(`${country}/${city}`).format('h:mm A'); //24h format
   expect(result).toBe(expected);
 });
 
 test(NAME_TEST + 'OnlyCountryTurkey_H24', () => {
   let country = 'Turkey';
   let result = MomentTimeZone.timeZoneWithCountry(country, true);
-  let expected = moment.tz(`${country}`).format('HH:mm'); //24h forma
+  let expected = moment.tz(`${country}`).format('HH:mm'); //24h format
   expect(result).toBe(expected);
 });
 
 test(NAME_TEST + 'OnlyCountryTurkey_AMPM', () => {
   let country = 'Turkey';
   let result = MomentTimeZone.timeZoneWithCountry(country, false);
-  let expected = moment.tz(`${country}`).format('HH:mm A'); //24h forma
+  let expected = moment.tz(`${country}`).format('h:mm A'); //12 format
   expect(result).toBe(expected);
 });
 

@@ -73,7 +73,7 @@ class MomentTimeZone {
   static _getFormat(h24Format) {
     let format = 'HH:mm';
     if (h24Format === false) {
-      format += ' A';
+      format = 'h:mm A';
     }
     return format;
   }

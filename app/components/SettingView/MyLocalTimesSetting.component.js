@@ -160,6 +160,7 @@ class MyLocalTimesSetting extends Component {
               <Switch
                 theme={theme}
                 value={this.state.darkTheme}
+                disabled={true}
                 onValueChange={() =>
                   this.changeValueTheme(!this.state.darkTheme)
                 }

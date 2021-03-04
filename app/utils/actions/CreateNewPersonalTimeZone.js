@@ -15,6 +15,8 @@
 import MomentTimeZone from '../MomentTimeZone';
 import TimeZoneCity from '../model/TimeZoneCity';
 import Util from '../Util';
+import DAOAppStorage from '../DAOAppStorage';
+import Constant from '../Constant';
 
 const LOG_TAG = `${new Date().toISOString()} CreateNewPersonalTimeZone.js`;
 
@@ -29,18 +31,22 @@ class CreateNewPersonalTimeZone {
     if (!cityName) {
       onlyCountry = true;
     }
-
     countryName = Util.doChangeIntoApiName(countryName);
-
+    let formatH24 = undefined;
+    DAOAppStorage.getObjectWithKey(Constant.db.TIME_FORMAT).then(value => {
+      formatH24 = value;
+    });
+    console.warn(LOG_TAG, `Format H24 -> ${formatH24}`);
     let timezone;
     try {
       if (onlyCountry === true) {
-        timezone = MomentTimeZone.timeZoneWithCountry(countryName);
+        timezone = MomentTimeZone.timeZoneWithCountry(countryName, formatH24);
       } else {
         cityName = Util.doChangeIntoApiName(cityName);
         timezone = MomentTimeZone.timeZoneWithCityAnCountry(
           cityName,
           countryName,
+          formatH24,
         );
       }
     } catch (e) {

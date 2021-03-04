@@ -53,11 +53,8 @@ class MyBetweenTime extends Component {
       dialogVisible: false,
       loading: false,
       intervalEvent: undefined,
-      networkEvent: undefined,
-      networkStatus: true,
       dataSource: [],
     };
-
     this.doCloseSnackBar = this.doCloseSnackBar.bind(this);
     this.doAddDataToList = this.doAddDataToList.bind(this);
     this.doCloseDialog = this.doCloseDialog.bind(this);
@@ -151,13 +148,23 @@ class MyBetweenTime extends Component {
       LOG_TAG,
       `In method updateCityDataSource with object ${localTimeCity}`,
     );
+    DAOAppStorage.getObjectWithKey(Constant.db.TIME_FORMAT).then(value => {
+      if (value !== this.state.timeFormat) {
+        this.setState({
+          timeFormat: value,
+        });
+      }
+    });
     let cityTimeObject = TimeZoneCity.fromJsonToClass(localTimeCity);
     console.debug(
       LOG_TAG,
       `TimeZoneCity from json is: ${cityTimeObject.nameCity}`,
     );
     let queryFormat = cityTimeObject.toString(); //This return CITY/COUNTRY or only COUNTRY
-    let timeZoneUpdate = MomentTimeZone.timeZoneWithFormat(queryFormat);
+    let timeZoneUpdate = MomentTimeZone.timeZoneWithFormat(
+      queryFormat,
+      this.state.timeFormat,
+    );
     cityTimeObject.setTime(timeZoneUpdate);
     return cityTimeObject;
   }
@@ -167,12 +174,13 @@ class MyBetweenTime extends Component {
     let init = await DAOAppStorage.getObjectWithKey(
       Constant.modelMediator.INIT,
     );
+    let timeFormat = await DAOAppStorage.getObjectWithKey(
+      Constant.db.TIME_FORMAT,
+    );
+
     if (!init) {
       //Initialize APP
-      await DAOAppStorage.putObjectWithKey(
-        Constant.modelMediator.INIT,
-        true,
-      );
+      await DAOAppStorage.putObjectWithKey(Constant.modelMediator.INIT, true);
       await DAOAppStorage.putObjectWithKey(
         Constant.modelMediator.REPOSITORY,
         this.state.dataSource,
@@ -193,6 +201,7 @@ class MyBetweenTime extends Component {
     let interval = setInterval(this.refreshCityList, 60000);
     this.setState({
       intervalEvent: interval,
+      timeFormat: timeFormat,
     });
   }
 
@@ -253,7 +262,6 @@ class MyBetweenTime extends Component {
               Constant.language.HOME_newTimeZone,
             )}
             icon="plus"
-            disabled={!this.state.networkStatus}
             onPress={() => this.setState({dialogVisible: true})}
           />
           <ActivityIndicator

@@ -14,7 +14,6 @@
  * if not, write to the Free Software Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  */
 import React, {Component} from 'react';
-
 import {createDrawerNavigator} from '@react-navigation/drawer';
 import {NavigationContainer} from '@react-navigation/native';
 import MyBetweenTime from './index';
@@ -52,7 +51,16 @@ class MyLocalTimesApp extends Component {
     return (
       <NavigationContainer>
         <DrawerNavigation.Navigator
-          drawerContent={props => <LocalTimeDrawer {...props} />}
+          drawerContent={props => (
+            <LocalTimeDrawer
+              {...props}
+              changeTimeFormat={newValue =>
+                this.setState({
+                  timeFormat: newValue,
+                })
+              }
+            />
+          )}
           initialRouteName={Constant.navigation.HOME}>
           <DrawerNavigation.Screen
             name={Constant.navigation.HOME}
