@@ -32,7 +32,7 @@ import LanguageProvider from './utils/LanguageProvider';
 import Constant from './utils/Constant';
 import MyLocalTimeAppBar from './components/LocalTimeDrawer/LocalTimeAppBar.component';
 import {SafeAreaView, StatusBar} from 'react-native';
-import MomentTimeZone from './utils/actions/MomentTimeZone';
+import MomentTimeZone from './utils/MomentTimeZone';
 import TimeZoneCity from './utils/model/TimeZoneCity';
 
 const LOG_TAG = new Date().toISOString() + ' ' + 'index.js';

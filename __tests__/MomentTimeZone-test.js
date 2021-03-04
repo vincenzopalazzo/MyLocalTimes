@@ -1,6 +1,6 @@
 import 'react-native';
 import React from 'react';
-import MomentTimeZone from '../app/utils/actions/MomentTimeZone';
+import MomentTimeZone from '../app/utils/MomentTimeZone';
 import moment from 'moment-timezone';
 
 jest.mock('react-native-localize', () => {

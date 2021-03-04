@@ -16,7 +16,7 @@
 'use strict';
 
 import moment from 'moment-timezone';
-import Util from '../Util';
+import Util from './Util';
 
 const LOG_TAG = new Date().toISOString() + ' ' + 'MomentTimeZone.js ';
 
