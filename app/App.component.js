@@ -22,6 +22,7 @@ import LocalTimeDrawer from './components/LocalTimeDrawer/LocalTimeDrawer.compon
 import Constant from './utils/Constant';
 import Util from './utils/Util';
 import DAOAppStorage from './utils/DAOAppStorage';
+import AppModel from './utils/AppModel';
 
 const DrawerNavigation = createDrawerNavigator();
 
@@ -35,11 +36,12 @@ class MyLocalTimesApp extends Component {
   }
 
   async initDatabaseWithLocalInfo() {
-    const timeFormat = Util.getTimeFormatPreferer();
-    await DAOAppStorage.getObjectWithKeyDefVal(
+    let timeFormat = Util.getTimeFormatPreferer();
+    timeFormat = await DAOAppStorage.getObjectWithKeyDefVal(
       Constant.db.TIME_FORMAT,
       timeFormat,
     );
+    AppModel.getInstance().putValue(Constant.db.TIME_FORMAT, timeFormat);
     // TODO: Choose also the APP language
   }
 

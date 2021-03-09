@@ -34,6 +34,7 @@ import MyLocalTimeAppBar from './components/LocalTimeDrawer/LocalTimeAppBar.comp
 import {SafeAreaView, StatusBar} from 'react-native';
 import MomentTimeZone from './utils/MomentTimeZone';
 import TimeZoneCity from './utils/model/TimeZoneCity';
+import AppModel from './utils/AppModel';
 
 const LOG_TAG = new Date().toISOString() + ' ' + 'index.js';
 const LITE_THEME = ThemeManager.lite;
@@ -148,22 +149,16 @@ class MyBetweenTime extends Component {
       LOG_TAG,
       `In method updateCityDataSource with object ${localTimeCity}`,
     );
-    DAOAppStorage.getObjectWithKey(Constant.db.TIME_FORMAT).then(value => {
-      if (value !== this.state.timeFormat) {
-        this.setState({
-          timeFormat: value,
-        });
-      }
-    });
     let cityTimeObject = TimeZoneCity.fromJsonToClass(localTimeCity);
     console.debug(
       LOG_TAG,
       `TimeZoneCity from json is: ${cityTimeObject.nameCity}`,
     );
     let queryFormat = cityTimeObject.toString(); //This return CITY/COUNTRY or only COUNTRY
+    const timeFormat = AppModel.getInstance().getValue(Constant.db.TIME_FORMAT);
     let timeZoneUpdate = MomentTimeZone.timeZoneWithFormat(
       queryFormat,
-      this.state.timeFormat,
+      timeFormat,
     );
     cityTimeObject.setTime(timeZoneUpdate);
     return cityTimeObject;

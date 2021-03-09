@@ -1,5 +1,4 @@
 import React from 'react';
-import {Modal, View} from 'react-native';
 import {Dialog, Button, Paragraph, Portal, withTheme} from 'react-native-paper';
 import LanguageProvider from '../../utils/LanguageProvider';
 import Constant from '../../utils/Constant';

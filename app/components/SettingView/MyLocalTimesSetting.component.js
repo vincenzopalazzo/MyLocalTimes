@@ -13,6 +13,7 @@
  * You should have received a copy of the GNU General Public License along with this program;
  * if not, write to the Free Software Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  */
+
 'use strict';
 
 import React, {Component} from 'react';
@@ -26,6 +27,7 @@ import ShareAppAction from '../../utils/actions/ShareAppAction';
 import RateAppAction from '../../utils/actions/RateAppAction';
 import DialogChooseLanguageComponent from './DialogChooseLanguage.component';
 import DAOAppStorage from '../../utils/DAOAppStorage';
+import AppModel from '../../utils/AppModel';
 
 const LOG_TAG = `${new Date().toISOString()} MyLocalTimesSetting.component.js`;
 
@@ -64,18 +66,20 @@ class MyLocalTimesSetting extends Component {
     this.setState({
       darkTheme: newValue,
     });
-    DAOAppStorage.putObjectWithKey('darkTheme', newValue).catch(e =>
+    DAOAppStorage.putObjectWithKey(Constant.db.DARK_THEME, newValue).catch(e =>
       console.error(`Error generated is ${e}`),
     );
+    AppModel.getInstance().putValue(Constant.db.DARK_THEME, newValue);
   }
 
   changeValueTimeFormat(newValue) {
     this.setState({
       typeHoursFormat: newValue,
     });
-    DAOAppStorage.putObjectWithKey('typeHoursFormat', newValue).catch(e =>
+    DAOAppStorage.putObjectWithKey(Constant.db.TIME_FORMAT, newValue).catch(e =>
       console.error(`Error generated is ${e}`),
     );
+    AppModel.getInstance().putValue(Constant.db.TIME_FORMAT, newValue);
   }
 
   async componentDidMount() {

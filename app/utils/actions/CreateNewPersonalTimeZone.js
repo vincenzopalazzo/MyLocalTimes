@@ -15,8 +15,8 @@
 import MomentTimeZone from '../MomentTimeZone';
 import TimeZoneCity from '../model/TimeZoneCity';
 import Util from '../Util';
-import DAOAppStorage from '../DAOAppStorage';
 import Constant from '../Constant';
+import AppModel from '../AppModel';
 
 const LOG_TAG = `${new Date().toISOString()} CreateNewPersonalTimeZone.js`;
 
@@ -32,11 +32,8 @@ class CreateNewPersonalTimeZone {
       onlyCountry = true;
     }
     countryName = Util.doChangeIntoApiName(countryName);
-    let formatH24 = undefined;
-    DAOAppStorage.getObjectWithKey(Constant.db.TIME_FORMAT).then(value => {
-      formatH24 = value;
-    });
-    console.warn(LOG_TAG, `Format H24 -> ${formatH24}`);
+    let formatH24 = AppModel.getInstance().getValue(Constant.db.TIME_FORMAT);
+    console.debug(LOG_TAG, `Format H24 -> ${formatH24}`);
     let timezone;
     try {
       if (onlyCountry === true) {
@@ -50,6 +47,7 @@ class CreateNewPersonalTimeZone {
         );
       }
     } catch (e) {
+      console.error(e.toString());
       throw e;
     }
 
