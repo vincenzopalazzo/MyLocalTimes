@@ -9,9 +9,7 @@ MyLocalTimes is developed with [react-native](https://facebook.github.io/react-n
 ---
 ## What do it do?
 
-This application is a method for consulting the timezone for all world and it utilizes the [open source API](https://github.com/davidayalas/current-time) to obtain the timezone.
-
-PS: in the future, this application could be upgraded to utilize [Moment.js library](https://momentjs.com/) to load the timezone from the local bundle, but for the moment for the correct utilize of the application it is need an internet connection.
+This application helps to consult the timezone for all world, and it uses Moment.js library to obtain the correct timezone.
 
 ---
 ## Screenshot
