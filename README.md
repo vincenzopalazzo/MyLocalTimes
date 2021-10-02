@@ -9,9 +9,9 @@ MyLocalTimes is developed with [react-native](https://facebook.github.io/react-n
 ---
 ## What do it do?
 
-This application is a method for consulting the timezone for all world and it utilized the [open source API](https://github.com/davidayalas/current-time) for obtain the timezone.
+This application is a method for consulting the timezone for all world and it utilizes the [open source API](https://github.com/davidayalas/current-time) to obtain the timezone.
 
-PS: in the future, this application could be upgraded on utilized [Moment.js library](https://momentjs.com/) for load the timezone from the local bundle, but to the moment for the correct utilized of the application is need the internet connection.
+PS: in the future, this application could be upgraded to utilize [Moment.js library](https://momentjs.com/) to load the timezone from the local bundle, but for the moment for the correct utilize of the application it is need an internet connection.
 
 ---
 ## Screenshot
@@ -26,7 +26,7 @@ You can find the application on [Google store](https://play.google.com/store/app
 
 ## Why you have developed this application?
 
-I'm traveling to Phoenix to Arizona for a few months and for applying my react-native lecture I decided to develop a mobile application for consulting the local time of cities, so I and my parent can use this application for know the hours in the city
+I'm traveling to Phoenix (Arizona) for a few months and for applying my react-native lecture I decided to develop a mobile application for consulting the local time of cities, so I and my parents can use this application to know the time in each other city.
 
 ## I can improve this work with my contributing?
 
