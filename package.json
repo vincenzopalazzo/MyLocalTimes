@@ -20,7 +20,7 @@
     "i18n-js": "^3.5.1",
     "jetify": "^1.0.2",
     "lodash.memoize": "^4.1.2",
-    "moment-timezone": "^0.5.33",
+    "moment-timezone": "^0.5.35",
     "npm": "^7.3.0",
     "react": "16.9.0",
     "react-native": "^0.63.4",
